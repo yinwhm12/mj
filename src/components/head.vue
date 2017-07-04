@@ -4,7 +4,8 @@
     <el-col :span="24">
       <div class="grid-content bg-purple-dark">
         <!--<img src="../assets/daozhou_logo.png" style="height: 55px;position: absolute;left: 22%"/><span style="font-family: 'Hiragino Sans GB'; font-size: 28px;position:absolute;left: 25.5%;top: 14px;">银滩道州麻将</span>-->
-        <div><img src="../assets/daozhou_logo.png" style="height: 55px"/><span>银滩道州麻将</span></div>
+        <div style="vertical-align: middle;display:table-cell"><img src="../assets/daozhou_logo.png" style="height: 55px"/>
+          <span style="vertical-align: middle;padding-bottom: 5px;left: 55px" >银滩道州麻将</span></div>
         <!--<div><span>银滩道州麻将</span></div>-->
       </div>
     </el-col>
