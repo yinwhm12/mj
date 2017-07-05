@@ -11,6 +11,7 @@ import 'element-ui/lib/theme-default/index.css'
 // import Hello from './components/Hello.vue'
 import PageMain from './components/pageMain.vue'
 import Login  from  './components/login.vue'
+import ContentMain  from './components/contentMain.vue'
 
 Vue.config.productionTip = false
 
@@ -34,7 +35,11 @@ export var router = new VueRouter({
     // name: 'pageMain',
     component: PageMain,
     children: [
-
+      {
+        name: 'content',
+        path: 'content',
+        component: ContentMain,
+      }
     ]
   }]
 })
