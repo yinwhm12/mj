@@ -1,72 +1,123 @@
 <template>
-    <!-- 左侧菜单 -->
+    <!-- 房卡左侧菜单 -->
   <div>
     <el-row class="tac" type="flex" :gutter="10">
       <el-col :span="3">
         <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" @select="handleSelect">
-          <el-menu-item index="1"><i class="el-icon-message"></i>总计</el-menu-item>
-          <el-menu-item index="2"><i class="el-icon-menu"></i>售卡记录</el-menu-item>
-          <el-menu-item index="3"><i class="el-icon-setting"></i>充卡记录</el-menu-item>
-          <el-menu-item index="4"><i class="el-icon-setting"></i>总代理记录</el-menu-item>
+          <template v-for="(menu,index) in tableMenus">
+          <el-menu-item :index="index.toString()"><i class="el-icon-message"></i>{{ menu }}</el-menu-item>
+          </template>
         </el-menu>
       </el-col>
 
-      <!-- 表格-->
-      <el-col :span="14">
-        <el-table
-          :data="tableData"
-          stripe
-          style="width: 100%">
-          <el-table-column
-            prop="date"
-            label="日期"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="姓名"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="地址">
-          </el-table-column>
-        </el-table>
-      </el-col>
+      <!-- 右侧内容 表格-->
+
+        <el-col :span="24">
+
+          <span v-if="menuIndex!=0">
+              <el-row>
+                <el-col>
+                  <div class="block">
+                    <span class="demonstration">时间:</span>
+                    <el-date-picker
+                      v-model="value6"
+                      type="daterange"
+                      placeholder="选择日期范围">
+                    </el-date-picker>
+                    <!--<span></span>-->
+                  </div>
+                </el-col>
+              </el-row>
+          </span>
+
+          <div style="margin: 10px 0;"></div>
+
+          <el-row>
+            <el-col>
+                <el-table
+                  :data="tableData"
+                  stripe
+                  style="width: 100%"
+                  type="expand"
+                  height="80px">
+                  <template v-for="title in clickedMenu">
+                    <el-table-column
+                      prop="date"
+                      :label="title"
+                      width="180">
+                    </el-table-column>
+                  </template>
+                </el-table>
+            </el-col>
+          </el-row>
+        </el-col>
 
     </el-row>
   </div>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
+
   export default {
     data() {
       return {
-        activeIndex: '1',
-        activeIndex2: '1',
+        activeIndex: '0',
+        menuIndex: '0',//被选中的 某项
+        value6: '',
+        clickedMenu: [],
+//        tableMenus: [],
         tableData: [{
           date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
         }, {
           date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
         }, {
           date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
         }, {
           date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
         }]
       };
+    },
+    computed:{
+      ...mapGetters({
+        tableMenus: 'getRoomMenu',
+        tableFirstTitle: 'getRoomFirst',
+        tableSecondTitle: 'getRoomSecond',
+        tableThirdTitle: 'getRoomThird',
+        tableFourthTitle: 'getRoomFourth',
+      })
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+        this.menuIndex = key
+//        console.log(key === '2')
+        switch (key) {
+          case '1':
+            this.clickedMenu = this.tableSecondTitle
+            break;
+          case '2':
+            this.clickedMenu = this.tableThirdTitle
+            break;
+          case '3':
+            this.clickedMenu = this.tableFourthTitle
+            break;
+          default :
+            this.clickedMenu = this.tableFirstTitle
+//            console.log("tttt--",this.clickedMenu)
+            break;
+        }
+      },
+      loading(){
+//        console.log("tttt--",this.tableSecondTitle)
+//        console.log("tttt--",this.tableThirdTitle)
+//        console.log("tttt--",this.tableFourthTitle)
+        this.menuIndex = '0'
+        this.clickedMenu = this.tableFirstTitle
       }
+    },
+    mounted: function () {
+      this.loading()
     }
   }
 </script>

@@ -1,0 +1,131 @@
+<template>
+    <!-- 系统消息界面-->
+
+  <div>
+    <el-row class="tac" type="flex" :gutter="10">
+      <el-col :span="3">
+        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" @select="handleSelect">
+          <template v-for="(menu,index) in tableMenus">
+            <el-menu-item :index="index.toString()"><i class="el-icon-message"></i>{{ menu }}</el-menu-item>
+          </template>
+        </el-menu>
+      </el-col>
+
+      <!-- 右侧内容 表格-->
+
+      <el-col :span="24">
+
+          <span v-if="menuIndex==0">
+              <el-row>
+                <el-col>
+                  <div style="width: 100%;height: 50px;display: inline-block;">
+                    <div class="block">
+                      <span class="demonstration">时间:</span>
+                      <el-date-picker
+                        v-model="value6"
+                        type="daterange"
+                        placeholder="选择日期范围">
+                      </el-date-picker>
+                      <!--<span></span>-->
+                    <!--<div style="float:right;"><el-button type="primary" size="small">查询</el-button></div>-->
+                    </div>
+                  </div>
+                   <!--&nbsp;&nbsp;&nbsp;<el-button type="primary" size="small">查询</el-button>-->
+                </el-col>
+              </el-row>
+          </span>
+
+        <!--<div style="margin: 10px 0;"></div>-->
+
+        <el-row>
+          <el-col>
+            <span v-if="menuIndex == 0">
+              <div style="float: right"><el-button type="primary" size="small" @click="openDialog"><i class="el-icon-plus"></i>添加公告</el-button></div>
+            </span>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-table
+              :data="tableData"
+              stripe
+              style="width: 100%"
+              type="expand"
+              height="80px">
+              <template v-for="title in clickedMenu">
+                <el-table-column
+                  prop="date"
+                  :label="title"
+                  width="180">
+                </el-table-column>
+              </template>
+            </el-table>
+          </el-col>
+        </el-row>
+      </el-col>
+
+    </el-row>
+
+    <el-dialog
+      v-model="dialogVisible"
+      size="tiny">
+      <game-publish @close="onEditClose"></game-publish>
+    </el-dialog>
+  </div>
+
+</template>
+
+
+<script>
+  import {mapGetters} from 'vuex'
+  import GamePublish from './publish_game.vue'
+
+  export default {
+    components:{
+      GamePublish,
+    },
+    data(){
+      return {
+        activeIndex: '0',
+        menuIndex: '0',//被选中的 某项
+        value6: '',
+        clickedMenu: [],
+        dialogVisible: false,
+        tableData: [{
+          date: '2016-05-02',
+        }, {
+          date: '2016-05-04',
+        }, {
+          date: '2016-05-01',
+        }, {
+          date: '2016-05-03',
+        }]
+      };
+    },
+    computed:{
+      ...mapGetters({
+        tableMenus: 'getSystemMenu',
+        tableFirstTitle: 'getSystemFirst',
+      })
+    },
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+        this.menuIndex = key
+      },
+      loading(){
+        this.menuIndex = '0'
+        this.clickedMenu = this.tableFirstTitle
+      },
+      openDialog(){
+        this.dialogVisible = true
+      },
+      onEditClose(needRefresh){
+        this.dialogVisible = false
+      }
+    },
+    mounted: function () {
+      this.loading()
+    }
+  }
+</script>

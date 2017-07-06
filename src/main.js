@@ -8,6 +8,8 @@ import ElementUI from 'element-ui'
 
 import 'element-ui/lib/theme-default/index.css'
 
+import store from './store'
+
 // import Hello from './components/Hello.vue'
 import PageMain from './components/pageMain.vue'
 import Login  from  './components/login.vue'
@@ -47,6 +49,7 @@ export var router = new VueRouter({
 new Vue({
   el: '#app',
   router: router,
+  store: store,
   render: h => h(App)
 })
 
