@@ -64,11 +64,12 @@
                 </div>
               </el-col>
             </el-row>
-            <div style="margin: 5px 0;"></div>
+            <div style="margin: 10px 0;"></div>
             <el-row>
               <el-col :offset="2"><span>*填写版本日记<i class="el-icon-edit"></i>:</span></el-col>
             </el-row>
             <el-row>
+              <div style="margin: 10px 0;"></div>
               <el-col :offset="2" :span="19">
                 <el-input
                   type="textarea"
@@ -78,16 +79,17 @@
                 </el-input>
               </el-col>
             </el-row>
-             <div style="margin: 5px 0;"></div>
+             <div style="margin: 10px 0;"></div>
             <el-row>
               <el-col :offset="2"><span><i class="el-icon-caret-right"></i>版本下载链接:</span></el-col>
             </el-row>
+             <div style="margin: 10px 0;"></div>
             <el-row>
               <el-col :span="19" :offset="2">
                 <el-input v-model="input" placeholder="请输入版本下载链接地址"></el-input>
               </el-col>
             </el-row>
-            <div style="margin: 5px 0;"></div>
+            <div style="margin: 15px 0;"></div>
             <el-row>
               <el-col :offset="10">
                 <el-button type="primary">发布新版本</el-button>
