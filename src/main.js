@@ -5,6 +5,7 @@ import App from './App'
 // import router from './router'
 import VueRouter from 'vue-router'
 import ElementUI from 'element-ui'
+import VueResource from 'vue-resource'
 
 import 'element-ui/lib/theme-default/index.css'
 
@@ -19,6 +20,7 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)
+Vue.use(VueResource)
 
 
 /* eslint-disable no-new */
@@ -88,6 +90,29 @@ Vue.filter("stampToTimeFull", (timestamp) => {
   return newDate.format('yyyy-MM-dd hh:mm:ss')
 })
 
+
+Vue.http.interceptors.push((request, next) => {
+  var xtoken = sessionStorage.getItem("token")
+  if (xtoken){
+    request.headers.set('Authorization',xtoken)
+  }
+  var host = ENV.HOST_URL
+  if (request.url.indexOf(host) !== 0 ){
+    request.url = host + request.url
+  }
+  next((response) => {
+    if (response.status === 401){
+      router.push({path: '/login'})
+    }else if(response.status !==200 ){
+      let message = response.status != 0 ? response.body : "请检查网络"
+      Vue.prototype.$message({
+        message: message,
+        type: 'warning'
+      })
+    }
+    return response
+  })
+})
 
 new Vue({
   el: '#app',
