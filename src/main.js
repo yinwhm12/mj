@@ -10,6 +10,8 @@ import VueResource from 'vue-resource'
 import 'element-ui/lib/theme-default/index.css'
 
 import store from './store'
+import auth from './auth'
+
 
 // import Hello from './components/Hello.vue'
 import PageMain from './components/pageMain.vue'
@@ -31,6 +33,13 @@ Vue.use(VueResource)
 //   components: { App }
 // })
 
+const NotFound = {
+  template: '<p>Page not found</p>'
+}
+const About = {
+  template: '<p>about page</p>'
+}
+
 export var router = new VueRouter({
   mode: 'hash',
   base: __dirname,
@@ -45,6 +54,15 @@ export var router = new VueRouter({
         component: ContentMain,
       }
     ]
+  },{
+    path: '/login',
+    component: Login
+  },{
+    path: '/not_found',
+    component: NotFound
+  },{
+    path: '/about',
+    component: About
   }]
 })
 
@@ -90,6 +108,15 @@ Vue.filter("stampToTimeFull", (timestamp) => {
   return newDate.format('yyyy-MM-dd hh:mm:ss')
 })
 
+router.beforeEach((to, from, next) => {
+  // console.log("host_url",ENV.HOST_URL)
+  if (to.path !== '/login' && !auth.check()) {
+    // return a Promise that resolves to true or false
+    next("/login")
+  } else {
+    next()
+  }
+})
 
 Vue.http.interceptors.push((request, next) => {
   var xtoken = sessionStorage.getItem("token")

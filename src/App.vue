@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <!--<img src="./assets/logo.png">-->
-    <head-view></head-view>
+    <!--<head-view></head-view>-->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-  import HeadView from './components/head.vue'
+//  import HeadView from './components/head.vue'
 export default {
   name: 'app',
-  components:{
-    HeadView
-  }
+//  components:{
+//    HeadView
+//  }
 }
 </script>
 
