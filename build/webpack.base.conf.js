@@ -3,6 +3,10 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 
+var projectRoot = path.resolve(__dirname, '../')
+var env = process.env.NODE_ENV
+var webpack = require("webpack")
+
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -63,5 +67,14 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    new webpack.ProvidePlugin({
+      // ENV: projectRoot + "/config/" + ( env === 'development' ? 'dev' : ( env === 'production' ? 'prod' : 'test' ) ) + ".env"
+      ENV: projectRoot + "/config/" + ( env === 'development' ? 'dev' : 'prod' ) + ".env"
+      //jQuery: "jquery",
+      //$: "jquery"
+    })
+  ],
 }
