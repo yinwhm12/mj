@@ -4,11 +4,11 @@
       <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
          <!--<img src="../assets/daozhou_logo.png">-->
            <h3 class="title"> <img src="../assets/daozhou_logo.png">&nbsp;&nbsp;&nbsp;银滩道州麻将系统</h3>
-        <el-form-item prop="account">
-          <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
+        <el-form-item prop="name">
+          <el-input type="text" v-model="ruleForm2.name" auto-complete="off" placeholder="账号"></el-input>
         </el-form-item>
-        <el-form-item prop="checkPass">
-          <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
+        <el-form-item prop="password">
+          <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="密码"></el-input>
         </el-form-item>
         <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
         <el-form-item style="width:100%;">
@@ -58,15 +58,15 @@ import cook from '../auth/cookie'
       return {
         logining: false,
         ruleForm2: {
-          account: '',
-          checkPass: ''
+          name: '',
+          password: ''
         },
         rules2: {
-          account: [
+          name: [
             { required: true, message: '请输入账号', trigger: 'blur' },
             //{ validator: validaePass }
           ],
-          checkPass: [
+          password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
             //{ validator: validaePass2 }
           ]
@@ -85,18 +85,21 @@ import cook from '../auth/cookie'
             //_this.$router.replace('/table');
             this.logining = true;
             //NProgress.start();
-            var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-            var url = '/session/'
+            var loginParams = { name: this.ruleForm2.name, password: this.ruleForm2.password };
+            var url = '/user/login/'
             var data = JSON.stringify(this.ruleForm2)
+              console.log("--=====",data)
             this.$http.post(url,data)
               .then((res) =>{
 //                this.$store.commit('')
                 if (this.checked){
 //                  记住密码
-                  cook.setCookie(this.ruleForm2.account,this.ruleForm2.checkPass,24 * 60)
+                  var daozhouUser = this.ruleForm2.name + "&" + this.ruleForm2.password
+                  cook.setCookie("daozhouUser",daozhouUser,24 * 60 * 3)
                 }
-                window.localStorage.setItem('daozhouName',this.ruleForm2.account)
+                window.localStorage.setItem('daozhouName',this.ruleForm2.name)
                 sessionStorage.setItem('token',res.data.token)
+                this.$router.push({path: '/home/content/'})
               })
               .catch((err) =>{
                 this.$message({
@@ -125,12 +128,20 @@ import cook from '../auth/cookie'
           }
         });
       },
-      loadAccountInfo(){
-
+      loadNameInfo(){
+        let userInfo = cook.getCookie('daozhouUser')
+//        console.log("loading-",userInfo)
+        if (Boolean(userInfo) === false){
+          return
+        }else{
+          let index = userInfo.indexOf("&");
+          this.ruleForm2.name =   userInfo.substring(0,index)
+          this.ruleForm2.password = userInfo.substring(index+1)
+        }
       }
     },
     mounted:function () {
-
+      this.loadNameInfo();
     }
   }
 </script>
