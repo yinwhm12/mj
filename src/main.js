@@ -110,6 +110,7 @@ Vue.filter("stampToTimeFull", (timestamp) => {
 
 router.beforeEach((to, from, next) => {
   // console.log("host_url",ENV.HOST_URL)
+  // console.log("before----",auth.check())
   if (to.path !== '/login' && !auth.check()) {
     // return a Promise that resolves to true or false
     next("/login")

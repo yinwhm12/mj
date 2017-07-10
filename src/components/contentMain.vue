@@ -4,15 +4,15 @@
     <el-row>
       <el-col :span="18" :push="3">
         <el-tabs type="border-card">
-          <el-tab-pane label="房卡 19000">
+          <el-tab-pane label="房卡 ">
             <!--用户管理-->
             <left-menu></left-menu>
           </el-tab-pane>
-          <el-tab-pane label="代理 20">
+          <el-tab-pane label="代理 ">
             <!--配置管理-->
             <proxy-menu></proxy-menu>
           </el-tab-pane>
-          <el-tab-pane label="玩家 200000">
+          <el-tab-pane label="玩家 ">
             <!--角色管理-->
             <player-menu></player-menu>
           </el-tab-pane>

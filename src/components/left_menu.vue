@@ -28,7 +28,7 @@
                   </div>
                 </el-col>
               </el-row>
-          </span>
+          <!--</span>-->
 
           <div style="margin: 10px 0;"></div>
 
@@ -50,6 +50,11 @@
                 </el-table>
             </el-col>
           </el-row>
+          </span>
+          <span v-else>
+            <user-view></user-view>
+          </span>
+
         </el-col>
 
     </el-row>
@@ -58,8 +63,12 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import UserView from './user_info.vue'
 
   export default {
+    components:{
+      UserView,
+    },
     data() {
       return {
         activeIndex: '0',

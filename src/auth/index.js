@@ -9,6 +9,7 @@ export default {
   },
   check () {
     var jwt = sessionStorage.getItem('token')
+    // console.log("jwt--",jwt)
     if (jwt) {
       this.user.authenticated = true
       return true
