@@ -1,6 +1,6 @@
 <template>
     <!-- 导航 房卡 代理 玩家 系统消息 版本控制-->
-  <div>
+  <div class="body-height">
     <el-row>
       <el-col :span="18" :push="3">
         <el-tabs type="border-card">
@@ -30,10 +30,14 @@
   </div>
 </template>
 
-<style>
+<style scoped>
   body{
     margin: 0;
     padding: 0;
+  }
+  .body-height{
+    min-height: 600px;
+    max-height: 800px;
   }
 </style>
 
