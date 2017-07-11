@@ -33,17 +33,18 @@
           <div style="margin: 10px 0;"></div>
 
           <el-row>
-            <el-col>
+            <el-col :span="24">
                 <el-table
                   :data="tableData"
-                  stripe
+                  border
                   style="width: 100%"
-                  type="expand"
-                  height="80px">
+                  max-height="250">
                   <template v-for="title in clickedMenu">
                     <el-table-column
                       prop="date"
                       :label="title"
+                      :resizable="true"
+                      :show-overflow-tooltip="true"
                       width="180">
                     </el-table-column>
                   </template>
