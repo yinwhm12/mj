@@ -150,6 +150,16 @@
       </el-col>
 
     </el-row>
+
+    <el-dialg
+      v-model="dialogVisible"
+      size="small">
+      <player-dialog :player_id="player_id"></player-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addBadPlayer">拉黑</el-button>
+      </div>
+    </el-dialg>
   </div>
 </template>
 
@@ -186,8 +196,12 @@
 <script>
   import {mapGetters} from 'vuex'
   import util from '../utiljs/util'
+  import PlayerDialog from './addBadDialog.vue'
 
   export default {
+    components:{
+      PlayerDialog,
+    },
     data() {
       return {
         activeIndex: '0',
@@ -199,6 +213,8 @@
         onlineCounts:0,
         clickedMenu: [],
         currentPage4: 4,
+        dialogVisible: false,
+        player_id: '',
         player: [],
 //        tableMenus: [],
         pageInfo: {
@@ -217,6 +233,9 @@
       })
     },
     methods: {
+      onEditClose(){
+
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.pageInfo.limit = val
@@ -276,7 +295,8 @@
       },
       twoChoosePlayer(){//判断是否是黑名单添加搜索 还是 普通搜索
         if(this.menuIndex === '1'){//添加 黑名单 搜索
-
+          this.player_id = this.input1
+          this.dialogVisible = true
         }else{
           this.getOnePlayer();
         }
@@ -340,6 +360,26 @@
               type: 'warning'
             })
           }))
+      },
+//      拉黑
+      addBadPlayer(){
+          let message = ''
+          this.$http.put('/player/addBadPlayer/?id='+this.player_id)
+            .then((res =>{
+                message = '已成功将ID为'+this.player_id+'拉入黑名单!'
+                this.$message({
+                  message:message,
+                  type:'success'
+                })
+            }))
+            .catch((err =>{
+                message = '操作失败!'
+                this.$message({
+                  message:message,
+                  type:'warning'
+                })
+            }))
+        this.dialogVisible = false
       },
       loading(){
         this.menuIndex = '0'
