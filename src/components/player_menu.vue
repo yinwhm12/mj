@@ -108,6 +108,9 @@
                 prop="bought_room_cards"
                 label="历史购卡/张"
                 width="120">
+                <template scope="scope">
+                  <el-button type="text" @click="boughtCardsDialog(scope.row.id)">{{scope.row.bought_room_cards}}</el-button>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="game_record"
@@ -151,15 +154,25 @@
 
     </el-row>
 
-    <el-dialg
-      v-model="dialogVisible"
-      size="small">
-      <player-dialog :player_id="player_id"></player-dialog>
+    <el-dialog
+    v-model="dialogVisible"
+    size="small">
+    <player-dialog :player_id="player_id"></player-dialog>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="danger" @click="addBadPlayer">拉黑</el-button>
+    </div>
+  </el-dialog>
+
+    <el-dialog
+      v-model="boughtDialogVisible"
+      size="mini">
+      <bought-cards-dialog :buyer_id="buyer_id"></bought-cards-dialog>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addBadPlayer">拉黑</el-button>
+        <el-button @click="boughtDialogVisible = false" type="primary">确 定</el-button>
+        <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
       </div>
-    </el-dialg>
+    </el-dialog>
   </div>
 </template>
 
@@ -197,10 +210,12 @@
   import {mapGetters} from 'vuex'
   import util from '../utiljs/util'
   import PlayerDialog from './addBadDialog.vue'
+  import BoughtCardsDialog  from './boughtCardsDialog.vue'
 
   export default {
     components:{
       PlayerDialog,
+      BoughtCardsDialog,
     },
     data() {
       return {
@@ -214,6 +229,8 @@
         clickedMenu: [],
         currentPage4: 4,
         dialogVisible: false,
+        boughtDialogVisible:false,
+        buyer_id:'',
         player_id: '',
         player: [],
 //        tableMenus: [],
@@ -232,8 +249,13 @@
 //        tableSecondTitle: 'getProxySecond',
       })
     },
+    watch:{
+
+    },
     methods: {
-      onEditClose(){
+      boughtCardsDialog(id){
+        this.buyer_id = id
+        this.boughtDialogVisible = true
 
       },
       handleSizeChange(val) {
