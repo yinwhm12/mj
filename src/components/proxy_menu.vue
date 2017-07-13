@@ -40,65 +40,81 @@
                   &nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="oneButton">查询</el-button>
               </el-row>
 
-                <div style="margin: 8px 0;"></div>
-                <el-row>
-              <el-col>
-                <el-table
-                  :data="proxyData"
-                  stripe
-                  style="width: 100%"
-                >
-                  <!--<template v-for="title in clickedMenu">-->
-                    <el-table-column
-                      prop="date"
-                      label="加入时间"
-                      width="180">
-                      <template scope="scope"><p>{{scope.row.join_proxy_time | stampToTimeFull}}</p></template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="date"
-                      label="代理级别"
-                      width="120">
-                      <template scope="scope"><p>{{scope.row.is_proxy == 1 ? "一级代理":"二级代理"}}</p></template>
-                      </el-table-column>
-                    <el-table-column
-                      prop="id"
-                      label="玩家ID"
-                      width="180">
-                    </el-table-column>
-                    <el-table-column
-                      prop="nick_name"
-                      label="昵称"
-                      width="180">
-                    </el-table-column>
-                    <el-table-column
-                      prop="has_cards_count"
-                      label="现持卡数"
-                      width="120">
-                    </el-table-column>
-                    <el-table-column
-                      prop="bought_room_cards"
-                      label="历史交易/张"
-                      width="120">
-                    </el-table-column>
-
-                  <!--</template>-->
-                </el-table>
-              </el-col>
-            </el-row>
-
               <div style="margin: 8px 0;"></div>
-              <div class="block page-align">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="pageInfo.currentPage"
-                  :page-sizes="[2, 4, 6,8]"
-                  :page-size="pageInfo.limit"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="pageInfo.total">
-                </el-pagination>
-              </div>
+              <span v-if="pageInfo.total <= 0">
+                <el-row>
+                  <el-col><p style="text-align: center;font-size: large">暂无该<span style="color: red">{{input1}}</span>玩家信息</p></el-col>
+                </el-row>
+              </span>
+              <span v-else>
+                <el-row>
+                <el-col>
+                  <el-table
+                    :data="proxyData"
+                    stripe
+                    style="width: 100%"
+                  >
+                    <!--<template v-for="title in clickedMenu">-->
+                      <el-table-column
+                        prop="date"
+                        label="加入时间"
+                        width="180">
+                        <template scope="scope"><p>{{scope.row.join_proxy_time | stampToTimeFull}}</p></template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="date"
+                        label="代理级别"
+                        width="120">
+                        <template scope="scope">
+                          <span v-if="scope.row.is_proxy === 1">
+                            <el-button type="text" @click="showProxyBranch(scope.row.id)">一级代理</el-button>
+                          </span>
+                          <span v-else><p>二级代理</p></span>
+                          <!--<p>{{scope.row.is_proxy == 1 ? "一级代理":"二级代理"}}</p>-->
+                        </template>
+                        </el-table-column>
+                      <el-table-column
+                        prop="id"
+                        label="玩家ID"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        prop="nick_name"
+                        label="昵称"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        prop="has_cards_count"
+                        label="现持卡数"
+                        width="120">
+                      </el-table-column>
+                      <el-table-column
+                        prop="bought_room_cards"
+                        label="历史交易/张"
+                        width="120">
+                        <template scope="scope">
+                          <el-button type="text" @click="proxyCardsEvent(scope.row.id)">{{scope.row.bought_room_cards == 0 ? "d":"adf"}}</el-button>
+                        </template>
+                      </el-table-column>
+
+                    <!--</template>-->
+                  </el-table>
+                </el-col>
+              </el-row>
+
+                <div style="margin: 8px 0;"></div>
+                <div class="block page-align">
+                  <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageInfo.currentPage"
+                    :page-sizes="[2, 4, 6,8]"
+                    :page-size="pageInfo.limit"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="pageInfo.total">
+                  </el-pagination>
+                </div>
+              </span>
             </div>
           </span>
 
@@ -113,9 +129,11 @@
                     :on-icon-click="handleIconClick">
                   </el-input>
                 </el-col>
-                  &nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="twoButton">查询</el-button>
+                  &nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="twoButton">添加代理</el-button>
               </el-row>
               <div style="margin: 8px 0;"></div>
+          <span v-if="searchData.length <= 0"></span>
+          <span v-else>
               <el-row>
                 <el-col :span="15">
                   <div class="grid-content bg-purple-light">
@@ -155,6 +173,7 @@
                   </el-table>
                 </el-col>
               </el-row>
+          </span>
         </span>
       </el-col>
 
@@ -172,9 +191,29 @@
         </div>
         <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <el-button type="primary" @click="changeProxyClassEvent">确 定</el-button>
     </span>
       </el-dialog>
+
+    <el-dialog
+    v-model="branchDialogVisible"
+    size="small">
+      <proxy-branch-dialog :proxy_id="proxy_id"></proxy-branch-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="branchDialogVisible = false" type="primary">确 定</el-button>
+        <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      v-model="proxySoldDialogVisible"
+      size="small">
+      <proxy-sold-dialog :proxy_id="proxy_id"></proxy-sold-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="proxySoldDialogVisible = false" type="primary">确 定</el-button>
+        <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -207,7 +246,13 @@
 <script>
   import {mapGetters} from 'vuex'
   import util from '../utiljs/util'
+  import ProxyBranchDialog  from './showProxyBranchDialog.vue'
+  import ProxySoldDialog from './proxySoldCardsDialog.vue'
   export default {
+    components:{
+      ProxyBranchDialog,
+      ProxySoldDialog
+    },
     data() {
       return {
         activeIndex: '0',
@@ -231,6 +276,9 @@
         searchData: [],
         dialogVisible: false,
         select: '',
+        proxy_id: '',
+        branchDialogVisible: false,
+        proxySoldDialogVisible: false,
 //        tableMenus: [],
       };
     },
@@ -242,7 +290,30 @@
       })
     },
     methods: {
-
+      proxyCardsEvent(id){//弹出 代理 历史交易卡
+        this.proxySoldDialogVisible = true
+        this.proxy_id = id
+      },
+//      一级代理
+      showProxyBranch(id){
+        console.log("idddddd0",id)
+        this.proxy_id = id
+        this.branchDialogVisible = true
+      },
+      changeProxyClassEvent(){
+        if (this.select === ''){
+          this.$message({
+            message: '请选择代理级别',
+            type: 'warning'
+          })
+        }else {
+          this.$http.put('/proxy/changeClass/?id='+this.input2 +"&class="+this.select)
+            .then((res =>{
+              this.searchOne()
+            }))
+        }
+        this.dialogVisible = false
+      },
       changeClass(id){
         this.dialogVisible = true
       },
@@ -320,6 +391,10 @@
             this.proxyData = res.body.data
             this.pageInfo.total = res.body.total
           }))
+          .catch((err =>{
+            console.log("total---")
+            this.pageInfo.total = 0
+          }))
       },
       searchId(){
         if (this.input1 === ''){
@@ -341,6 +416,7 @@
               message: '暂无该玩家ID信息',
               type: 'warning'
             })
+            this.pageInfo.total = 0
           }))
       },
       searchOne(){//two search

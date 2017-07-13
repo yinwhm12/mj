@@ -116,6 +116,14 @@
                 prop="game_record"
                 label="游戏记录"
                 width="100">
+                <template scope="scope">
+                  <span v-if="scope.row.game_record > 0">
+                    <el-button type="text" @click="gameRecords(scope.row.id)">{{scope.row.game_record}}</el-button>
+                  </span>
+                  <span v-else>
+                    {{scope.row.game_record}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="is_proxy"
@@ -173,6 +181,16 @@
         <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
       </div>
     </el-dialog>
+
+    <el-dialog
+      v-model="gameRecordDialogVisible"
+      size="large">
+      <game-detail-dialog :player_id="player_id"></game-detail-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="gameRecordDialogVisible = false" type="primary">确 定</el-button>
+        <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -211,11 +229,13 @@
   import util from '../utiljs/util'
   import PlayerDialog from './addBadDialog.vue'
   import BoughtCardsDialog  from './boughtCardsDialog.vue'
+  import GameDetailDialog from './gameDetialDialog.vue'
 
   export default {
     components:{
       PlayerDialog,
       BoughtCardsDialog,
+      GameDetailDialog,
     },
     data() {
       return {
@@ -230,6 +250,7 @@
         currentPage4: 4,
         dialogVisible: false,
         boughtDialogVisible:false,
+        gameRecordDialogVisible: false,
         buyer_id:'',
         player_id: '',
         player: [],
@@ -253,6 +274,9 @@
 
     },
     methods: {
+      gameRecords(id){//游戏的 记录
+        this.gameRecordDialogVisible = true
+      },
       boughtCardsDialog(id){
         this.buyer_id = id
         this.boughtDialogVisible = true

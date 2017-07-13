@@ -14,43 +14,14 @@
 
         <el-col :span="24">
 
-          <span v-if="menuIndex!=0">
-              <el-row>
-                <el-col>
-                  <div class="block">
-                    <span class="demonstration">时间:</span>
-                    <el-date-picker
-                      v-model="value6"
-                      type="daterange"
-                      placeholder="选择日期范围">
-                    </el-date-picker>
-                    <!--<span></span>-->
-                  </div>
-                </el-col>
-              </el-row>
-          <!--</span>-->
-
-          <div style="margin: 10px 0;"></div>
-
-          <el-row>
-            <el-col :span="24">
-                <el-table
-                  :data="tableData"
-                  border
-                  style="width: 100%"
-                  max-height="250">
-                  <template v-for="title in clickedMenu">
-                    <el-table-column
-                      prop="date"
-                      :label="title"
-                      :resizable="true"
-                      :show-overflow-tooltip="true"
-                      width="180">
-                    </el-table-column>
-                  </template>
-                </el-table>
-            </el-col>
-          </el-row>
+          <span v-if="menuIndex=== '1'">
+            <first-menu></first-menu>
+          </span>
+          <span v-else-if="menuIndex === '2'">
+            <second-menu></second-menu>
+          </span>
+          <span v-else-if="menuIndex === '3'">
+            <fourth-menu></fourth-menu>
           </span>
           <span v-else>
             <user-view></user-view>
@@ -65,10 +36,16 @@
 <script>
   import {mapGetters} from 'vuex'
   import UserView from './user_info.vue'
+  import FirstMenu from './roomFirstMenu.vue'
+  import SecondMenu from './secondMenu.vue'
+  import FourthMenu from './fouthMenu.vue'
 
   export default {
     components:{
       UserView,
+      FirstMenu,
+      SecondMenu,
+      FourthMenu,
     },
     data() {
       return {
@@ -101,7 +78,7 @@
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
         this.menuIndex = key
-//        console.log(key === '2')
+        console.log(key === '0')
         switch (key) {
           case '1':
             this.clickedMenu = this.tableSecondTitle

@@ -41,15 +41,30 @@
                   :data="tableData"
                   stripe
                   style="width: 100%"
-                  type="expand"
                   height="80px">
-                  <template v-for="title in clickedMenu">
                     <el-table-column
                       prop="date"
-                      :label="title"
+                      label="发布时间"
                       width="180">
                     </el-table-column>
-                  </template>
+                    <el-table-column
+                        prop="date"
+                        label="更新日记"
+                        width="180">
+                      </el-table-column>
+                    <el-table-column
+                        prop="date"
+                        label="下载地址"
+                        width="180">
+                      </el-table-column>
+                    <el-table-column
+                        prop="date"
+                        label="操作"
+                        width="180">
+                      <template scope="scope">
+                        <el-button type="primary" size="small">删除</el-button>
+                      </template>
+                      </el-table-column>
                 </el-table>
               </el-col>
             </el-row>
