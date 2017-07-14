@@ -63,10 +63,10 @@
         title="充值提示"
         :visible.sync="confirmDialog"
         size="tiny">
-        <span>你向玩家ID: xxx,充值 1100张卡?</span>
+        <p>你向玩家ID:<span style="font-size: large;color: #F7BA2A">xxxxx</span>,充值<span style="font-size: large;color: red">1100</span> 张卡?</p>
         <span slot="footer" class="dialog-footer">
     <el-button @click="confirmDialog = false">取 消</el-button>
-    <el-button type="primary" @click="confirmDialog = false">确 定</el-button>
+    <el-button type="primary" @click="confirmDialog = false">确定充值</el-button>
   </span>
       </el-dialog>
     </div>

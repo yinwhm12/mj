@@ -83,7 +83,7 @@
     <el-dialog
       v-model="dialogVisible"
       size="tiny">
-      <game-publish @close="onEditClose"></game-publish>
+      <game-publish :whichOne="whichOne" @close="onEditClose"></game-publish>
     </el-dialog>
   </div>
 
@@ -107,6 +107,7 @@
         dialogVisible: false,
         titleOne:['发布时间','广播时间'],
         titleTwo:['公告','广播'],
+        whichOne: '0',
         tableData: [{
           date: '2016-05-02',
         }, {
@@ -128,6 +129,7 @@
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
         this.menuIndex = key
+        this.whichOne = key
       },
       loading(){
         this.menuIndex = '0'
