@@ -148,8 +148,6 @@
         this.getAllSold(val)
       },
       getTime(){
-
-        console.log("value-time",this.time)
         let dates = []
         if (this.time.length > 1) {
           if (this.time[0] !== null) {
@@ -163,15 +161,12 @@
         let ss = dates.join(",")
         this.timeStr = ss
         this.getAllSold(0)
-        console.log("sss===",ss)
-        console.log("sss===len",ss.length)
       },
       getAllSold(page = 0){
         if (page === 0){
           this.pageInfo.offset = 0
           this.pageInfo.total = 0
         }
-        let urlTime = '/soldCards/getMySoldCards/?id='+ this.buyer_id + '&offset='+ this.pageInfo.offset + '&limit='+this.pageInfo.limit
         let url = ''
         if (this.timeStr === ''|| this.timeStr.length <=0){
           url = '/soldCards/getMySoldCards/?id='+ this.buyer_id + '&offset='+ this.pageInfo.offset + '&limit='+this.pageInfo.limit

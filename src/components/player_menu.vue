@@ -75,6 +75,9 @@
                   prop="image"
                   label="头像"
                   width="125">
+                  <template scope="scope">
+                    <img :src="scope.row.image" style="width: 100px;height: 50px"/>
+                  </template>
                 </el-table-column>
               <el-table-column
                 prop="id"
@@ -247,7 +250,6 @@
         creaseCounts:0,
         onlineCounts:0,
         clickedMenu: [],
-        currentPage4: 4,
         dialogVisible: false,
         boughtDialogVisible:false,
         gameRecordDialogVisible: false,

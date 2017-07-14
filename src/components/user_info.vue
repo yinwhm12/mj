@@ -4,11 +4,11 @@
       <el-row>
         <el-col :span="24"><div class="grid-content bg-purple-light">
           <div >
-            <el-row>
-              <el-col :offset="2">
-                <div style="margin-top: 15px"><span class="font-content">用 户 名:</span> {{user.name}}</div>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :offset="2">-->
+                <!--<div style="margin-top: 15px"><span class="font-content">用 户 名:</span> {{user.name}}</div>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
             <el-row>
               <el-col :offset="2">
                 <div style="margin-top: 15px"><span class="font-content">账 户 ID:</span> {{user.id}}</div>
@@ -65,9 +65,9 @@
         size="tiny">
         <p>你向玩家ID:<span style="font-size: large;color: #F7BA2A">xxxxx</span>,充值<span style="font-size: large;color: red">1100</span> 张卡?</p>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="confirmDialog = false">取 消</el-button>
-    <el-button type="primary" @click="confirmDialog = false">确定充值</el-button>
-  </span>
+            <el-button @click="confirmDialog = false">取 消</el-button>
+            <el-button type="primary" @click="confirmDialog = false">确定充值</el-button>
+        </span>
       </el-dialog>
     </div>
 </template>
