@@ -26,12 +26,6 @@
               :resizable="true"
               :show-overflow-tooltip="true"
               width="180">
-            </el-table-column><el-table-column
-              prop="date"
-              label="售卡时间"
-              :resizable="true"
-              :show-overflow-tooltip="true"
-              width="180">
             </el-table-column>
             <el-table-column
                 prop="date"

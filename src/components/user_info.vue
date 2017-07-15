@@ -33,17 +33,17 @@
           <div >
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 15px"><span class="font-content">剩余卡数:</span> {{user.left_cards}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="rechargeEvent">代理充卡</el-button></div>
+                <div style="margin-top: 10px"><span class="font-content">剩余卡数:</span> {{user.left_cards}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="rechargeEvent">代理充卡</el-button></div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 15px"><span class="font-content">售出卡数:</span> {{user.sold_cards}}</div>
+                <div style="margin-top: 17px"><span class="font-content">售出卡数:</span> {{user.sold_cards}}</div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 15px"><span class="font-content">充卡次数:</span> {{user.recharge_times}}</div>
+                <div style="margin-top: 17px"><span class="font-content">充卡次数:</span> {{user.recharge_times}}</div>
               </el-col>
             </el-row>
           </div>
@@ -82,7 +82,7 @@
   }
   .grid-content {
     border-radius: 4px;
-    min-height: 140px;
+    min-height: 130px;
   }
   .font-content{
     color: #58B7FF;
