@@ -7,6 +7,7 @@ import VueRouter from 'vue-router'
 import ElementUI from 'element-ui'
 import VueResource from 'vue-resource'
 
+
 import 'element-ui/lib/theme-default/index.css'
 
 import store from './store'
@@ -54,6 +55,11 @@ export var router = new VueRouter({
         name: 'content',
         path: 'content',
         component: ContentMain,
+      },
+      {
+        name: 'upfile',
+        path: 'upfile',
+        component: UpFile,
       }
     ]
   },{
@@ -70,6 +76,7 @@ export var router = new VueRouter({
     component: About
   }]
 })
+
 
 Date.prototype.format = function (format) {
   var date = {
@@ -131,6 +138,7 @@ Vue.http.interceptors.push((request, next) => {
   }
   var host = ENV.HOST_URL
   if (request.url.indexOf(host) !== 0 ){
+    console.log("request.url:",request.url)
     request.url = host + request.url
   }
   next((response) => {
@@ -146,6 +154,7 @@ Vue.http.interceptors.push((request, next) => {
     return response
   })
 })
+
 
 new Vue({
   el: '#app',

@@ -13,7 +13,8 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
+    // moment: './src/utiljs/moment.min.js'
   },
   output: {
     path: config.build.assetsRoot,
