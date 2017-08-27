@@ -18,6 +18,8 @@ import PageMain from './components/pageMain.vue'
 import Login  from  './components/login.vue'
 import ContentMain  from './components/contentMain.vue'
 
+import UpFile from './components/upFlile.vue'
+
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
@@ -60,6 +62,9 @@ export var router = new VueRouter({
   },{
     path: '/not_found',
     component: NotFound
+  },{
+    path: '/upfile',
+    component: UpFile
   },{
     path: '/about',
     component: About
@@ -108,16 +113,16 @@ Vue.filter("stampToTimeFull", (timestamp) => {
   return newDate.format('yyyy-MM-dd hh:mm:ss')
 })
 
-router.beforeEach((to, from, next) => {
+// router.beforeEach((to, from, next) => {
   // console.log("host_url",ENV.HOST_URL)
   // console.log("before----",auth.check())
-  if (to.path !== '/login' && !auth.check()) {
-    // return a Promise that resolves to true or false
-    next("/login")
-  } else {
-    next()
-  }
-})
+  // if (to.path !== '/login' && !auth.check()) {
+  //   // return a Promise that resolves to true or false
+  //   next("/login")
+  // } else {
+  //   next()
+  // }
+// })
 
 Vue.http.interceptors.push((request, next) => {
   var xtoken = sessionStorage.getItem("token")
