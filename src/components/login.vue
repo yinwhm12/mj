@@ -3,7 +3,7 @@
     <div>
       <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
          <!--<img src="../assets/daozhou_logo.png">-->
-           <h3 class="title"> <img src="../assets/daozhou_logo.png">&nbsp;&nbsp;&nbsp;银滩道州麻将系统</h3>
+           <h3 class="title"> <img src="../assets/daozhou_logo.png">&nbsp;&nbsp;&nbsp;银滩道州麻将代理后台系统</h3>
         <el-form-item prop="name">
           <el-input type="text" v-model="ruleForm2.name" auto-complete="off" placeholder="账号"></el-input>
         </el-form-item>
@@ -96,6 +96,8 @@ import cook from '../auth/cookie'
 //                  记住密码
                   var daozhouUser = this.ruleForm2.name + "&" + this.ruleForm2.password
                   cook.setCookie("daozhouUser",daozhouUser,24 * 60 * 3)
+                }else{
+                  cook.deleteCookie("daozhouUser")
                 }
                 window.localStorage.setItem('daozhouName',this.ruleForm2.name)
                 sessionStorage.setItem('token',res.data.token)

@@ -4,7 +4,7 @@
     <el-row>
       <el-col>
         <div class="grid-content bg-purple-light new-title">
-          <span class="head-title">公告内容</span>
+          <span class="head-title">{{whichOne === "0"?"公告":"广播"}}内容</span>
         </div>
       </el-col>
     </el-row>
@@ -48,6 +48,7 @@
 
 <script>
   export default{
+    props:["whichOne"],
     data() {
       return {
         textarea: '',

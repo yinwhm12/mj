@@ -75,6 +75,9 @@
                   prop="image"
                   label="头像"
                   width="125">
+                  <template scope="scope">
+                    <img :src="scope.row.image" style="width: 100px;height: 50px"/>
+                  </template>
                 </el-table-column>
               <el-table-column
                 prop="id"
@@ -108,11 +111,22 @@
                 prop="bought_room_cards"
                 label="历史购卡/张"
                 width="120">
+                <template scope="scope">
+                  <el-button type="text" @click="boughtCardsDialog(scope.row.id)">{{scope.row.bought_room_cards}}</el-button>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="game_record"
                 label="游戏记录"
                 width="100">
+                <template scope="scope">
+                  <span v-if="scope.row.game_record > 0">
+                    <el-button type="text" @click="gameRecords(scope.row.id)">{{scope.row.game_record}}</el-button>
+                  </span>
+                  <span v-else>
+                    {{scope.row.game_record}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="is_proxy"
@@ -151,15 +165,35 @@
 
     </el-row>
 
-    <el-dialg
-      v-model="dialogVisible"
-      size="small">
-      <player-dialog :player_id="player_id"></player-dialog>
+    <el-dialog
+    v-model="dialogVisible"
+    size="small">
+    <player-dialog :player_id="player_id"></player-dialog>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="danger" @click="addBadPlayer">拉黑</el-button>
+    </div>
+  </el-dialog>
+
+    <el-dialog
+      v-model="boughtDialogVisible"
+      size="mini">
+      <bought-cards-dialog :buyer_id="buyer_id"></bought-cards-dialog>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addBadPlayer">拉黑</el-button>
+        <el-button @click="boughtDialogVisible = false" type="primary">确 定</el-button>
+        <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
       </div>
-    </el-dialg>
+    </el-dialog>
+
+    <el-dialog
+      v-model="gameRecordDialogVisible"
+      size="large">
+      <game-detail-dialog :player_id="player_id"></game-detail-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="gameRecordDialogVisible = false" type="primary">确 定</el-button>
+        <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -197,10 +231,14 @@
   import {mapGetters} from 'vuex'
   import util from '../utiljs/util'
   import PlayerDialog from './addBadDialog.vue'
+  import BoughtCardsDialog  from './boughtCardsDialog.vue'
+  import GameDetailDialog from './gameDetialDialog.vue'
 
   export default {
     components:{
       PlayerDialog,
+      BoughtCardsDialog,
+      GameDetailDialog,
     },
     data() {
       return {
@@ -212,8 +250,10 @@
         creaseCounts:0,
         onlineCounts:0,
         clickedMenu: [],
-        currentPage4: 4,
         dialogVisible: false,
+        boughtDialogVisible:false,
+        gameRecordDialogVisible: false,
+        buyer_id:'',
         player_id: '',
         player: [],
 //        tableMenus: [],
@@ -232,8 +272,16 @@
 //        tableSecondTitle: 'getProxySecond',
       })
     },
+    watch:{
+
+    },
     methods: {
-      onEditClose(){
+      gameRecords(id){//游戏的 记录
+        this.gameRecordDialogVisible = true
+      },
+      boughtCardsDialog(id){
+        this.buyer_id = id
+        this.boughtDialogVisible = true
 
       },
       handleSizeChange(val) {

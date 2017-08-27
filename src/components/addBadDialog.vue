@@ -2,82 +2,91 @@
   <!--添加 黑名单弹出框-->
   <div>
     <el-row>
-      <el-col>
+      <el-col :span="24">
         <div class="grid-content bg-purple-light">
           <span class="black-head black-font">拉入黑名单</span>
         </div>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col :span="24">
-        <el-table
-          :data="player"
-          style="width: 100%">
-          <!--<template v-for="(title,index) in clickedMenu">-->
-          <el-table-column
-            prop="image"
-            label="头像"
-            width="125">
-          </el-table-column>
-          <el-table-column
-            prop="id"
-            label="玩家ID"
-            width="148">
-          </el-table-column>
-          <el-table-column
-            prop="nick_name"
-            label="昵称"
-            width="140">
-          </el-table-column>
-          <el-table-column
-            prop="sex"
-            label="性别"
-            width="80"> ===1 ? "男":"女"
-            <template scope="scope">
-              <p>{{scope.row.sex ===1 ? "男":"女"}}</p>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="game_point"
-            label="游戏积分"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            prop="used_room_cards"
-            label="房卡消耗"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            prop="bought_room_cards"
-            label="历史购卡/张"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="game_record"
-            label="游戏记录"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            prop="is_proxy"
-            label="代理"
-            width="125">
-            <template scope="scope">
-              <p>{{scope.row.is_proxy ===1 ? "一级代理":2 ? "二级代理":"否"}}</p>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="last_game_time"
-            label="最后一次登录"
-            width="200">
-            <template scope="scope">
-              <p>{{scope.row.last_game_time | stampToTimeFull}}</p>
-            </template>
-          </el-table-column>
+    <span v-if="this.player.length ===0">
+      <el-row>
+        <el-col>
+          <div style="text-align: center">请输入有戏的玩家ID或者该玩家已在黑名单了</div>
+        </el-col>
+      </el-row>
+    </span>
+    <span v-else>
+      <el-row>
+        <el-col :span="24">
+          <el-table
+            :data="player"
+            style="width: 100%">
+            <!--<template v-for="(title,index) in clickedMenu">-->
+            <el-table-column
+              prop="image"
+              label="头像"
+              width="125">
+            </el-table-column>
+            <el-table-column
+              prop="id"
+              label="玩家ID"
+              width="148">
+            </el-table-column>
+            <el-table-column
+              prop="nick_name"
+              label="昵称"
+              width="140">
+            </el-table-column>
+            <el-table-column
+              prop="sex"
+              label="性别"
+              width="80"> ===1 ? "男":"女"
+              <template scope="scope">
+                <p>{{scope.row.sex ===1 ? "男":"女"}}</p>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="game_point"
+              label="游戏积分"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="used_room_cards"
+              label="房卡消耗"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="bought_room_cards"
+              label="历史购卡/张"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="game_record"
+              label="游戏记录"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="is_proxy"
+              label="代理"
+              width="125">
+              <template scope="scope">
+                <p>{{scope.row.is_proxy ===1 ? "一级代理":2 ? "二级代理":"否"}}</p>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="last_game_time"
+              label="最后一次登录"
+              width="200">
+              <template scope="scope">
+                <p>{{scope.row.last_game_time | stampToTimeFull}}</p>
+              </template>
+            </el-table-column>
 
-          <!--</template>-->
-        </el-table>
-      </el-col>
-    </el-row>
+            <!--</template>-->
+          </el-table>
+        </el-col>
+      </el-row>
+    </span>
   </div>
 </template>
 
@@ -99,7 +108,7 @@
     display: inline-block;
     line-height: 50px;
     vertical-align:middle;
-    width: 100px;
+    width: 150px;
   }
   .black-font{
     color: #20A0FF;
@@ -114,11 +123,18 @@
       props:["player_id"],
       data() {
           return {
-              player: {},
+              player: [],
           }
       },
     methods: {
       getPlayerInfoById(){
+        if (this.player_id === ''||this.player_id.length === 0) {
+          this.$message({
+            message: '请确保输入的ID是有效的！',
+            type: 'warning'
+          })
+          return
+        }
           let url = '/player/getAPlayer/?id=' + this.player_id
           this.$http.get(url)
             .then((res =>{
@@ -132,5 +148,14 @@
             }))
       }
     },
+    watch:{
+      player_id(){
+        this.player = []
+          this.getPlayerInfoById()
+      }
+    },
+    mounted:function () {
+      this.getPlayerInfoById();
+    }
   }
 </script>

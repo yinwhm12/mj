@@ -15,7 +15,7 @@
 
       <el-col :span="24">
 
-          <span v-if="menuIndex==0">
+          <!--<span v-if="menuIndex==0">-->
               <el-row>
                 <el-col>
                   <div style="width: 100%;height: 50px;display: inline-block;">
@@ -33,15 +33,16 @@
                    <!--&nbsp;&nbsp;&nbsp;<el-button type="primary" size="small">查询</el-button>-->
                 </el-col>
               </el-row>
-          </span>
+          <!--</span>-->
 
         <!--<div style="margin: 10px 0;"></div>-->
 
         <el-row>
           <el-col>
-            <span v-if="menuIndex == 0">
-              <div style="float: right"><el-button type="primary" size="small" @click="openDialog"><i class="el-icon-plus"></i>添加公告</el-button></div>
-            </span>
+              <div style="float: right"><el-button type="primary" size="small" @click="openDialog"><i class="el-icon-plus"></i>
+              <span v-if="menuIndex == 0">添加公告</span>
+              <span v-else>添加广播</span>
+              </el-button></div>
           </el-col>
         </el-row>
         <el-row>
@@ -52,13 +53,26 @@
               style="width: 100%"
               type="expand"
               height="80px">
-              <template v-for="title in clickedMenu">
                 <el-table-column
                   prop="date"
-                  :label="title"
+                  :label="titleOne[Number(menuIndex)]"
                   width="180">
                 </el-table-column>
-              </template>
+                <el-table-column
+                    prop="date"
+                    :label="titleTwo[Number(menuIndex)]"
+                    width="180">
+                  </el-table-column>
+                <el-table-column
+                    prop="date"
+                    label="操作"
+                    width="250">
+                  <template scope="scope">
+                    <el-button type="primary" size="small">已发布</el-button>
+                    <el-button type="primary" size="small">修改</el-button>
+                    <el-button type="primary" size="small">删除</el-button>
+                  </template>
+                  </el-table-column>
             </el-table>
           </el-col>
         </el-row>
@@ -69,7 +83,7 @@
     <el-dialog
       v-model="dialogVisible"
       size="tiny">
-      <game-publish @close="onEditClose"></game-publish>
+      <game-publish :whichOne="whichOne" @close="onEditClose"></game-publish>
     </el-dialog>
   </div>
 
@@ -91,6 +105,9 @@
         value6: '',
         clickedMenu: [],
         dialogVisible: false,
+        titleOne:['发布时间','广播时间'],
+        titleTwo:['公告','广播'],
+        whichOne: '0',
         tableData: [{
           date: '2016-05-02',
         }, {
@@ -112,6 +129,7 @@
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
         this.menuIndex = key
+        this.whichOne = key
       },
       loading(){
         this.menuIndex = '0'

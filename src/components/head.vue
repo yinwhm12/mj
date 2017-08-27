@@ -7,7 +7,7 @@
         <div class="head-middle">
          <div class="logo"><img src="../assets/daozhou_logo.png"/>
            <span class="logo-font" >银滩道州麻将</span>
-           <div class="logo-user"><el-button :plain="true" type="warning"><i class="el-icon-information">lucky</i></el-button></div>
+           <div class="logo-user"><el-button :plain="true" type="warning" @click="loginOut"><i class="el-icon-information">lucky 退出</i></el-button></div>
          </div>
         </div>
         <!--<div><span>银滩道州麻将</span></div>-->
@@ -88,3 +88,19 @@
     background-color: #f9fafc;
   }
 </style>
+
+<script>
+  export default{
+    data(){
+      return{
+
+      }
+    },
+    methods:{
+      loginOut(){
+        sessionStorage.removeItem('token')
+        this.$router.push({path: '/login'})
+      }
+    }
+  }
+</script>
