@@ -45,7 +45,7 @@
                       prop="date"
                       label="发布时间"
                       width="180">
-                      <template scope="scope">
+                      <template slot-scope="scope">
                         <p>{{scope.row.created_time | stampToTimeFull}}</p>
                       </template>
                     </el-table-column>
@@ -63,7 +63,7 @@
                         prop="date"
                         label="操作"
                         width="180">
-                      <template scope="scope">
+                      <template slot-scope="scope">
                         <el-button type="primary" size="small" @click="deleteVersion(scope.row.id)">删除</el-button>
                       </template>
                       </el-table-column>

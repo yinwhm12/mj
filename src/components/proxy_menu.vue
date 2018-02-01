@@ -59,13 +59,13 @@
                         prop="date"
                         label="加入时间"
                         width="180">
-                        <template scope="scope"><p>{{scope.row.join_proxy_time | stampToTimeFull}}</p></template>
+                        <template slot-scope="scope"><p>{{scope.row.join_proxy_time | stampToTimeFull}}</p></template>
                       </el-table-column>
                       <el-table-column
                         prop="date"
                         label="代理级别"
                         width="120">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                           <span v-if="scope.row.is_proxy === 1">
                             <el-button type="text" @click="showProxyBranch(scope.row.id)">一级代理</el-button>
                           </span>
@@ -92,7 +92,7 @@
                         prop="bought_room_cards"
                         label="历史交易/张"
                         width="120">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                           <el-button type="text" @click="proxyCardsEvent(scope.row.id)">{{scope.row.bought_room_cards == 0 ? "d":"adf"}}</el-button>
                         </template>
                       </el-table-column>
@@ -166,7 +166,7 @@
                       prop="is_proxy"
                       label="代理级别"
                       width="193">
-                      <template scope="scope"><p>{{scope.row.is_proxy == 1 ? "一级代理":2 ? "二级代理":"不是代理"}}
+                      <template slot-scope="scope"><p>{{scope.row.is_proxy == 1 ? "一级代理":2 ? "二级代理":"不是代理"}}
                         <el-button type="primary" size="small" @click="changeClass(scope.row.id)">更改</el-button>
                       </p></template>
                     </el-table-column>

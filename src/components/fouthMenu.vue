@@ -68,7 +68,7 @@
             :resizable="true"
             :show-overflow-tooltip="true"
             width="180">
-            <template scope="scope"> <el-button type="primary">充值</el-button></template>
+            <template slot-scope="scope"> <el-button type="primary">充值</el-button></template>
           </el-table-column>
         </el-table>
       </el-col>

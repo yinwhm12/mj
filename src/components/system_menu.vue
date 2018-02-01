@@ -67,7 +67,7 @@
                     prop="date"
                     label="操作"
                     width="250">
-                  <template scope="scope">
+                  <template slot-scope="scope">
                     <el-button type="primary" size="small">已发布</el-button>
                     <el-button type="primary" size="small">修改</el-button>
                     <el-button type="primary" size="small">删除</el-button>

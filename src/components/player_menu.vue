@@ -75,7 +75,7 @@
                   prop="image"
                   label="头像"
                   width="125">
-                  <template scope="scope">
+                  <template slot-scope="scope">
                     <img :src="scope.row.image" style="width: 100px;height: 50px"/>
                   </template>
                 </el-table-column>
@@ -93,7 +93,7 @@
                 prop="sex"
                 label="性别"
                 width="80"> ===1 ? "男":"女"
-                <template scope="scope">
+                <template slot-scope="scope">
                   <p>{{scope.row.sex ===1 ? "男":"女"}}</p>
                 </template>
               </el-table-column>
@@ -111,7 +111,7 @@
                 prop="bought_room_cards"
                 label="历史购卡/张"
                 width="120">
-                <template scope="scope">
+                <template slot-scope="scope">
                   <el-button type="text" @click="boughtCardsDialog(scope.row.id)">{{scope.row.bought_room_cards}}</el-button>
                 </template>
               </el-table-column>
@@ -119,7 +119,7 @@
                 prop="game_record"
                 label="游戏记录"
                 width="100">
-                <template scope="scope">
+                <template slot-scope="scope">
                   <span v-if="scope.row.game_record > 0">
                     <el-button type="text" @click="gameRecords(scope.row.id)">{{scope.row.game_record}}</el-button>
                   </span>
@@ -132,7 +132,7 @@
                 prop="is_proxy"
                 label="代理"
                 width="125">
-                <template scope="scope">
+                <template slot-scope="scope">
                   <p>{{scope.row.is_proxy ===1 ? "一级代理":2 ? "二级代理":"否"}}</p>
                 </template>
               </el-table-column>
@@ -140,7 +140,7 @@
                 prop="last_game_time"
                 label="最后一次登录"
                 width="200">
-                <template scope="scope">
+                <template slot-scope="scope">
                   <p>{{scope.row.last_game_time | stampToTimeFull}}</p>
                 </template>
               </el-table-column>
