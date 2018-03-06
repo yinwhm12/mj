@@ -5,7 +5,7 @@
       <el-col :span="3">
         <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" @select="handleSelect">
           <template v-for="(menu,index) in tableMenus">
-            <el-menu-item :index="index.toString()"><i class="el-icon-message"></i>{{ menu }}</el-menu-item>
+            <el-menu-item :index="index.toString()">{{ menu }}</el-menu-item>
           </template>
         </el-menu>
       </el-col>
@@ -14,19 +14,20 @@
 
       <el-col :span="24">
         <!--第一个菜单的内容-->
-        <span v-if="menuIndex==0">
-              <el-row>
-                <el-col>
-                  <el-tag type="primary" :hit="true">总人数 {{ playerCounts }}人</el-tag>
-                  <el-tag type="success" :hit="true">在线人数 10,2000人</el-tag>
-                  <el-tag type="warning" :hit="true">昨日新增 1,1000人</el-tag>
-                </el-col>
-              </el-row>
-              <div style="margin: 8px 0;"></div>
-          </span>
+        <!--<span v-if="menuIndex==0">-->
+              <!--<el-row>-->
+                <!--<el-col>-->
+                  <!--<el-tag type="primary" :hit="true">总人数 {{ playerCounts }}人</el-tag>-->
+                  <!--<el-tag type="success" :hit="true">在线人数 10,2000人</el-tag>-->
+                  <!--<el-tag type="warning" :hit="true">昨日新增 1,1000人</el-tag>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<div style="margin: 8px 0;"></div>-->
+          <!--</span>-->
 
+        <span v-if="menuIndex ==1">
           <el-row>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-input
                     placeholder="请输入玩家ID"
                     icon="search"
@@ -36,34 +37,24 @@
                     :on-icon-click="handleIconClick">
                   </el-input>
                 </el-col>
-                  &nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="twoChoosePlayer">{{menuIndex == "1"?"添加黑名单":"查询"}}</el-button>
+                  &nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="twoChoosePlayer">划转玩家</el-button>
           </el-row>
+        </span>
         <div style="margin: 8px 0;"></div>
 
         <span v-if="menuIndex == 1">
           <el-row>
             <el-col>
               <div class="grid-content bg-purple-light">
-                <span class="black-head black-font">黑名单</span>
-                <div style="width: 300px;height: 30px;float: right; display: inline-block;line-height: 50px">
-                  <div style="width: 200px;">
-                    <el-input
-                      placeholder="请输入玩家ID"
-                      icon="search"
-                      v-model="input2"
-                      size="small"
-                      @keyup.enter.native="searchBadPlayerEvent"
-                      :on-icon-click="handleIconClickBlack">
-                    </el-input>
-                  </div>
-                  <!--&nbsp;<span style="width: 100px"><el-button type="primary" size="small">查询</el-button></span>-->
-               </div>
+                <!--<span class="black-head black-font">黑名单</span>-->
+             <!--写入要操作的 玩家 划转金币 钻石-->
               </div>
             </el-col>
           </el-row>
         </span>
 
         <!--<div style="margin: 8px 0;"></div>-->
+      <span v-if="menuIndex == 0">
 
         <el-row>
           <el-col :span="24">
@@ -81,7 +72,7 @@
                 </el-table-column>
               <el-table-column
                 prop="id"
-                label="玩家ID"
+                label="游戏ID"
                 width="148">
               </el-table-column>
               <el-table-column
@@ -89,66 +80,67 @@
                 label="昵称"
                 width="140">
               </el-table-column>
-              <el-table-column
-                prop="sex"
-                label="性别"
-                width="80"> ===1 ? "男":"女"
-                <template slot-scope="scope">
-                  <p>{{scope.row.sex ===1 ? "男":"女"}}</p>
-                </template>
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="sex"-->
+                <!--label="性别"-->
+                <!--width="80"> ===1 ? "男":"女"-->
+                <!--<template slot-scope="scope">-->
+                  <!--<p>{{scope.row.sex ===1 ? "男":"女"}}</p>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="game_point"
-                label="游戏积分"
+                label="本周贡献"
                 width="100">
               </el-table-column>
               <el-table-column
                 prop="used_room_cards"
-                label="房卡消耗"
+                label="本周战绩"
                 width="100">
               </el-table-column>
               <el-table-column
                 prop="bought_room_cards"
-                label="历史购卡/张"
+                label="代理人数"
                 width="120">
                 <template slot-scope="scope">
                   <el-button type="text" @click="boughtCardsDialog(scope.row.id)">{{scope.row.bought_room_cards}}</el-button>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="game_record"
-                label="游戏记录"
-                width="100">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.game_record > 0">
-                    <el-button type="text" @click="gameRecords(scope.row.id)">{{scope.row.game_record}}</el-button>
-                  </span>
-                  <span v-else>
-                    {{scope.row.game_record}}
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="is_proxy"
-                label="代理"
-                width="125">
-                <template slot-scope="scope">
-                  <p>{{scope.row.is_proxy ===1 ? "一级代理":2 ? "二级代理":"否"}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="last_game_time"
-                label="最后一次登录"
-                width="200">
-                <template slot-scope="scope">
-                  <p>{{scope.row.last_game_time | stampToTimeFull}}</p>
-                </template>
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="game_record"-->
+                <!--label="游戏记录"-->
+                <!--width="100">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.game_record > 0">-->
+                    <!--<el-button type="text" @click="gameRecords(scope.row.id)">{{scope.row.game_record}}</el-button>-->
+                  <!--</span>-->
+                  <!--<span v-else>-->
+                    <!--{{scope.row.game_record}}-->
+                  <!--</span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
+              <!--<el-table-column-->
+                <!--prop="is_proxy"-->
+                <!--label="代理"-->
+                <!--width="125">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<p>{{scope.row.is_proxy ===1 ? "一级代理":2 ? "二级代理":"否"}}</p>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
+              <!--<el-table-column-->
+                <!--prop="last_game_time"-->
+                <!--label="最后一次登录"-->
+                <!--width="200">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<p>{{scope.row.last_game_time | stampToTimeFull}}</p>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
 
               <!--</template>-->
             </el-table>
           </el-col>
         </el-row>
+      </span>
         <div style="margin: 8px 0;"></div>
         <div class="block page-align">
           <el-pagination
@@ -165,15 +157,15 @@
 
     </el-row>
 
-    <el-dialog
-    v-model="dialogVisible"
-    size="small">
-    <player-dialog :player_id="player_id"></player-dialog>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="danger" @click="addBadPlayer">拉黑</el-button>
-    </div>
-  </el-dialog>
+    <!--<el-dialog-->
+    <!--v-model="dialogVisible"-->
+    <!--size="small">-->
+    <!--<player-dialog :player_id="player_id"></player-dialog>-->
+    <!--<div slot="footer" class="dialog-footer">-->
+      <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
+      <!--<el-button type="danger" @click="addBadPlayer">拉黑</el-button>-->
+    <!--</div>-->
+  <!--</el-dialog>-->
 
     <el-dialog
       v-model="boughtDialogVisible"
@@ -436,8 +428,8 @@
     },
     mounted: function () {
       this.loading()
-      this.getPlayerCounts()
-      this.getPlayers(0)
+//      this.getPlayerCounts()
+//      this.getPlayers(0)
     }
   }
 </script>

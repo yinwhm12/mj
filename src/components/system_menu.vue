@@ -6,7 +6,7 @@
       <el-col :span="3">
         <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" @select="handleSelect">
           <template v-for="(menu,index) in tableMenus">
-            <el-menu-item :index="index.toString()"><i class="el-icon-message"></i>{{ menu }}</el-menu-item>
+            <el-menu-item :index="index.toString()">{{ menu }}</el-menu-item>
           </template>
         </el-menu>
       </el-col>
@@ -15,7 +15,6 @@
 
       <el-col :span="24">
 
-          <!--<span v-if="menuIndex==0">-->
               <el-row>
                 <el-col>
                   <div style="width: 100%;height: 50px;display: inline-block;">
@@ -26,16 +25,11 @@
                         type="daterange"
                         placeholder="选择日期范围">
                       </el-date-picker>
-                      <!--<span></span>-->
-                    <!--<div style="float:right;"><el-button type="primary" size="small">查询</el-button></div>-->
                     </div>
                   </div>
-                   <!--&nbsp;&nbsp;&nbsp;<el-button type="primary" size="small">查询</el-button>-->
                 </el-col>
               </el-row>
-          <!--</span>-->
 
-        <!--<div style="margin: 10px 0;"></div>-->
 
         <el-row>
           <el-col>
@@ -56,20 +50,20 @@
                 <el-table-column
                   prop="date"
                   :label="titleOne[Number(menuIndex)]"
-                  width="180">
+                  width="130">
                 </el-table-column>
                 <el-table-column
                     prop="date"
                     :label="titleTwo[Number(menuIndex)]"
-                    width="180">
+                    width="480">
                   </el-table-column>
                 <el-table-column
                     prop="date"
                     label="操作"
-                    width="250">
+                    width="180">
                   <template slot-scope="scope">
                     <el-button type="primary" size="small">已发布</el-button>
-                    <el-button type="primary" size="small">修改</el-button>
+                    <!--<el-button type="primary" size="small">修改</el-button>-->
                     <el-button type="primary" size="small">删除</el-button>
                   </template>
                   </el-table-column>

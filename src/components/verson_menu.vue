@@ -288,7 +288,7 @@
     },
     mounted: function () {
       this.loading()
-      this.getAllVersionInfo(0)
+//      this.getAllVersionInfo(0)
     }
   }
 </script>

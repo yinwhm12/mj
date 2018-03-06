@@ -448,8 +448,8 @@
     },
     mounted: function () {
       this.loading()
-      this.getProxyCount()
-      this.getAllProxyInfo(0)
+//      this.getProxyCount()
+//      this.getAllProxyInfo(0)
     }
   }
 </script>

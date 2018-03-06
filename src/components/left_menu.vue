@@ -5,7 +5,10 @@
       <el-col :span="3">
         <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" @select="handleSelect">
           <template v-for="(menu,index) in tableMenus">
-          <el-menu-item :index="index.toString()"><i class="el-icon-message"></i>{{ menu }}</el-menu-item>
+          <el-menu-item :index="index.toString()">
+            <!--<i class="el-icon-message"></i>-->
+            {{ menu }}
+          </el-menu-item>
           </template>
         </el-menu>
       </el-col>
@@ -15,7 +18,8 @@
         <el-col :span="24">
 
           <span v-if="menuIndex=== '1'">
-            <first-menu></first-menu>
+            <!--<first-menu></first-menu>-->
+            <edit-pwd></edit-pwd>
           </span>
           <span v-else-if="menuIndex === '2'">
             <second-menu></second-menu>
@@ -39,6 +43,7 @@
   import FirstMenu from './roomFirstMenu.vue'
   import SecondMenu from './secondMenu.vue'
   import FourthMenu from './fouthMenu.vue'
+  import EditPwd from './editPwd.vue'
 
   export default {
     components:{
@@ -46,6 +51,7 @@
       FirstMenu,
       SecondMenu,
       FourthMenu,
+      EditPwd
     },
     data() {
       return {

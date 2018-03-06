@@ -3,7 +3,7 @@
     <div>
       <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
          <!--<img src="../assets/daozhou_logo.png">-->
-           <h3 class="title"> <img src="../assets/daozhou_logo.png">&nbsp;&nbsp;&nbsp;银滩道州麻将代理后台系统</h3>
+           <h3 class="title"> <img src="../assets/daozhou_logo.png">&nbsp;&nbsp;&nbsp;东风棋牌后台系统</h3>
         <el-form-item prop="name">
           <el-input type="text" v-model="ruleForm2.name" auto-complete="off" placeholder="账号"></el-input>
         </el-form-item>
@@ -86,7 +86,7 @@ import cook from '../auth/cookie'
             this.logining = true;
             //NProgress.start();
             var loginParams = { name: this.ruleForm2.name, password: this.ruleForm2.password };
-            var url = '/user/login/'
+            var url = '/user/loginM/'
             var data = JSON.stringify(this.ruleForm2)
               console.log("--=====",data)
             this.$http.post(url,data)

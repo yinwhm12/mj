@@ -11,44 +11,47 @@
             <!--</el-row>-->
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 15px"><span class="font-content">账 户 ID:</span> {{user.id}}</div>
+                <div style="margin-top: 20px"><span class="font-content">昵称:</span> {{user.id}}</div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 15px"><span class="font-content">代理级别:</span> {{user.proxy_class == 1 ? "超级总代理":"普通总代理"}}</div>
+                <div style="margin-top: 20px">
+                  <!--<span class="font-content">代理级别:</span> {{user.proxy_class == 1 ? "超级总代理":"普通总代理"}}-->
+                  <span class="font-content">管理员</span>
+                </div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 15px"><span class="font-content">加入代理时间:</span> {{user.created_time | stampToTimeFull}}</div>
+                <div style="margin-top: 20px"><span class="font-content">加入代理时间:</span> {{user.created_time | stampToTimeFull}}</div>
               </el-col>
             </el-row>
           </div>
         </div></el-col>
       </el-row>
       <div style="margin: 15px 0;"></div>
-      <el-row>
-        <el-col :span="24"><div class="grid-content bg-purple-light">
-          <div >
-            <el-row>
-              <el-col :offset="2">
-                <div style="margin-top: 10px"><span class="font-content">剩余卡数:</span> {{user.left_cards}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="rechargeEvent">代理充卡</el-button></div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :offset="2">
-                <div style="margin-top: 17px"><span class="font-content">售出卡数:</span> {{user.sold_cards}}</div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :offset="2">
-                <div style="margin-top: 17px"><span class="font-content">充卡次数:</span> {{user.recharge_times}}</div>
-              </el-col>
-            </el-row>
-          </div>
-        </div></el-col>
-      </el-row>
+      <!--<el-row>-->
+        <!--<el-col :span="24"><div class="grid-content bg-purple-light">-->
+          <!--<div >-->
+            <!--<el-row>-->
+              <!--<el-col :offset="2">-->
+                <!--<div style="margin-top: 10px"><span class="font-content">剩余卡数:</span> {{user.left_cards}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button type="primary" size="small" @click="rechargeEvent">代理充卡</el-button></div>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+            <!--<el-row>-->
+              <!--<el-col :offset="2">-->
+                <!--<div style="margin-top: 17px"><span class="font-content">售出卡数:</span> {{user.sold_cards}}</div>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+            <!--<el-row>-->
+              <!--<el-col :offset="2">-->
+                <!--<div style="margin-top: 17px"><span class="font-content">充卡次数:</span> {{user.recharge_times}}</div>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+          <!--</div>-->
+        <!--</div></el-col>-->
+      <!--</el-row>-->
       <el-dialog
       v-model="dialogVisible"
       size="small">
@@ -82,7 +85,7 @@
   }
   .grid-content {
     border-radius: 4px;
-    min-height: 130px;
+    min-height: 180px;
   }
   .font-content{
     color: #58B7FF;
@@ -106,7 +109,7 @@ import HisMoney from './hisMoneyDialog.vue'
       }
     },
     mounted: function () {
-      this.getUserInfo()
+//      this.getUserInfo()
     },
     methods: {
       getUserInfo(){
