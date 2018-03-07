@@ -51,11 +51,17 @@
                   prop="date"
                   :label="titleOne[Number(menuIndex)]"
                   width="130">
+                  <template slot-scope="scope">
+                    {{scope.row.create_time}}
+                  </template>
                 </el-table-column>
                 <el-table-column
                     prop="date"
                     :label="titleTwo[Number(menuIndex)]"
                     width="480">
+                  <template slot-scope="scope">
+                    {{scope.row.message}}
+                  </template>
                   </el-table-column>
                 <el-table-column
                     prop="date"
@@ -64,12 +70,24 @@
                   <template slot-scope="scope">
                     <el-button type="primary" size="small">已发布</el-button>
                     <!--<el-button type="primary" size="small">修改</el-button>-->
-                    <el-button type="primary" size="small">删除</el-button>
+                    <el-button type="primary" size="small" @click="deleteEvent(scope.row.id)">删除</el-button>
                   </template>
                   </el-table-column>
             </el-table>
           </el-col>
         </el-row>
+        <div style="margin: 15px 0"></div>
+        <div class="block page-align">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageInfo.currentPage"
+            :page-sizes="[2, 4, 6,8]"
+            :page-size="pageInfo.limit"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageInfo.total">
+          </el-pagination>
+        </div>
       </el-col>
 
     </el-row>
@@ -83,10 +101,17 @@
 
 </template>
 
+<style scoped>
+  .page-align{
+    text-align: center;
+  }
+</style>
+
 
 <script>
   import {mapGetters} from 'vuex'
   import GamePublish from './publish_game.vue'
+  import util from '../utiljs/util'
 
   export default {
     components:{
@@ -102,15 +127,13 @@
         titleOne:['发布时间','广播时间'],
         titleTwo:['公告','广播'],
         whichOne: '0',
-        tableData: [{
-          date: '2016-05-02',
-        }, {
-          date: '2016-05-04',
-        }, {
-          date: '2016-05-01',
-        }, {
-          date: '2016-05-03',
-        }]
+        tableData: [],
+        pageInfo: {
+          currentPage: 1,
+          limit: 2,
+          offset: 0,
+          total: 0,
+        },
       };
     },
     computed:{
@@ -134,6 +157,35 @@
       },
       onEditClose(needRefresh){
         this.dialogVisible = false
+      },
+      //删除公告
+      deleteEvent(id){
+        this.$http.delete('/announcement/'+id)
+          .then((res =>{
+            this.$message(res.data)
+          }))
+          .catch((err =>{
+            this.$message(err.data)
+          }))
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pageInfo.limit = val
+//        this.getAllVersionInfo(0)
+//        console.log("page",this.pageInfo)
+      },
+      handleCurrentChange(currentPage) {
+        console.log(`当前页: ${currentPage}`);
+        let offset = util.buildOffsetByPage(currentPage,this.pageInfo.limit)
+        this.pageInfo.offset = offset
+//        this.getAllVersionInfo(currentPage)
+
+      },
+      //获取所有的 初始加载
+      getAllPublishInfoEvent(page = 0){
+        if(page === 0){
+
+        }
       }
     },
     mounted: function () {
