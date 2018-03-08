@@ -77,16 +77,18 @@
           </el-col>
         </el-row>
         <div style="margin: 15px 0"></div>
-        <div class="block page-align">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="pageInfo.currentPage"
-            :page-sizes="[2, 4, 6,8]"
-            :page-size="pageInfo.limit"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageInfo.total">
-          </el-pagination>
+        <!--<div v-show="tableData.length > 0">-->
+        <div v-show="true">
+          <div class="block page-align">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="pageInfo.currentPage"
+              :page-size="pageInfo.limit"
+              layout="total, prev, pager, next, jumper"
+              :total="pageInfo.total">
+            </el-pagination>
+          </div>
         </div>
       </el-col>
 
@@ -182,10 +184,37 @@
 
       },
       //获取所有的 初始加载
-      getAllPublishInfoEvent(page = 0){
+      getAllPublishByTimePage(page = 0){
         if(page === 0){
-
+          this.pageInfo.offset = 0;
+          this.pageInfo.total = 0;
         }
+        let url = '/announcement/getAllVersions';
+        this.$http.get(url,jsonData)
+          .then((res =>{
+
+          }))
+          .catch((err =>{
+            this.$message(err.data)
+          }))
+      },
+      getAllPublishByPage(page = 0){
+        if(page === 0){
+          this.pageInfo.offset = 0;
+          this.pageInfo.total = 0;
+        }
+        let url = '/announcement/getAllVersions/?offset='+this.pageInfo.offset + '&limit='+ this.pageInfo.limit;
+        this.$http.get(url)
+          .then((res => {
+            this.tableData = res.body.data;
+            this.pageInfo.total = res.body.total;
+          }))
+          .catch((err =>{
+            this.$message(err.data);
+          }))
+      },
+      addPublic(){
+
       }
     },
     mounted: function () {

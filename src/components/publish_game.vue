@@ -4,7 +4,7 @@
     <el-row>
       <el-col>
         <div class="grid-content bg-purple-light new-title">
-          <span class="head-title">{{whichOne === "0"?"公告":"广播"}}内容</span>
+          <span class="head-title">公告内容</span>
         </div>
       </el-col>
     </el-row>
@@ -20,7 +20,7 @@
     </el-row>
     <div style="margin: 12px 0;"></div>
     <el-row>
-      <el-col :span="8" :offset="4"><el-button type="primary">确定</el-button></el-col>
+      <el-col :span="8" :offset="4"><el-button type="primary" @click="OkButton">确定</el-button></el-col>
       <el-col :span="8" :push="4"><el-button type="primary" @click="close(false)">取消</el-button></el-col>
     </el-row>
   </div>
@@ -59,6 +59,9 @@
 //          console.debug()
         this.$emit('close', needRefresh)
       },
+      OkButton(){
+        if(this.textarea !== '')
+      }
     }
   }
 </script>
