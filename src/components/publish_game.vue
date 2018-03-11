@@ -60,7 +60,26 @@
         this.$emit('close', needRefresh)
       },
       OkButton(){
-        if(this.textarea !== '')
+        if(this.textarea !== ''||this.textarea.replace(/\s+/g,"") !== ''){
+          if(this.textarea.length > 30){
+            this.$message({
+              message: '请输入字数在30个数以内得公告!',
+              type: 'warning'
+            });
+            return;
+          }
+          let publicJson = {
+            message: this.textarea,
+          };
+          this.$http.post('/announcement/',JSON.stringify(publicJson))
+            .then((res =>{
+              this.$emit('close',true);
+            }))
+            .catch((err =>{
+              this.$message.error('发布失败,请检查网络!')
+//              this.$emit('')
+            }))
+        }
       }
     }
   }

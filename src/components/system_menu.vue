@@ -23,6 +23,7 @@
                       <el-date-picker
                         v-model="value6"
                         type="daterange"
+                        @change="timeEvent"
                         placeholder="选择日期范围">
                       </el-date-picker>
                     </div>
@@ -50,15 +51,15 @@
                 <el-table-column
                   prop="date"
                   :label="titleOne[Number(menuIndex)]"
-                  width="130">
+                  width="180">
                   <template slot-scope="scope">
-                    {{scope.row.create_time}}
+                    {{scope.row.create_time | stampToTimeFull}}
                   </template>
                 </el-table-column>
                 <el-table-column
                     prop="date"
                     :label="titleTwo[Number(menuIndex)]"
-                    width="480">
+                    width="430">
                   <template slot-scope="scope">
                     {{scope.row.message}}
                   </template>
@@ -70,15 +71,15 @@
                   <template slot-scope="scope">
                     <el-button type="primary" size="small">已发布</el-button>
                     <!--<el-button type="primary" size="small">修改</el-button>-->
-                    <el-button type="primary" size="small" @click="deleteEvent(scope.row.id)">删除</el-button>
+                    <el-button type="primary" size="small" @click="deleteEvent(scope.row._id)">删除</el-button>
                   </template>
                   </el-table-column>
             </el-table>
           </el-col>
         </el-row>
         <div style="margin: 15px 0"></div>
-        <!--<div v-show="tableData.length > 0">-->
-        <div v-show="true">
+        <div v-show="pageFlag">
+        <!--<div v-show="true">-->
           <div class="block page-align">
             <el-pagination
               @size-change="handleSizeChange"
@@ -136,6 +137,7 @@
           offset: 0,
           total: 0,
         },
+        pageFlag: false,
       };
     },
     computed:{
@@ -153,18 +155,29 @@
       loading(){
         this.menuIndex = '0'
         this.clickedMenu = this.tableFirstTitle
+//        let tt = 'iiiii';
+//        console.log('----------------le',tt.length)
       },
       openDialog(){
         this.dialogVisible = true
       },
       onEditClose(needRefresh){
+        if(needRefresh){
+          //添加成功 需更新
+          this.getAllPublishByPage(0);
+        }
         this.dialogVisible = false
       },
       //删除公告
       deleteEvent(id){
-        this.$http.delete('/announcement/'+id)
+        this.$http.delete('/announcement/:id='+id)
           .then((res =>{
-            this.$message(res.data)
+            this.$message(res.data);
+            if(this.value6.length === 2){
+              this.getAllPublishByTimePage(this.pageInfo.currentPage);
+              return
+            }
+            this.getAllPublishByPage(this.pageInfo.currentPage);
           }))
           .catch((err =>{
             this.$message(err.data)
@@ -180,7 +193,13 @@
         console.log(`当前页: ${currentPage}`);
         let offset = util.buildOffsetByPage(currentPage,this.pageInfo.limit)
         this.pageInfo.offset = offset
-//        this.getAllVersionInfo(currentPage)
+        if( Array.isArray(this.value6)){
+          if(this.value6.length ===2 && this.value6[0] !== null && this.value6[1] !== null){
+            this.getAllPublishByTimePage(currentPage);
+            return
+          }
+        }
+        this.getAllPublishByPage(currentPage)
 
       },
       //获取所有的 初始加载
@@ -189,10 +208,22 @@
           this.pageInfo.offset = 0;
           this.pageInfo.total = 0;
         }
-        let url = '/announcement/getAllVersions';
-        this.$http.get(url,jsonData)
+        let url = '/announcement/publicsByTime/';
+        let jsonData = {
+          offset: this.pageInfo.offset,
+          limit: this.pageInfo.limit,
+          before: Date.parse(this.value6[0])/1000,
+          after: Date.parse(this.value6[1])/1000,
+        };
+        this.$http.post(url,JSON.stringify(jsonData))
           .then((res =>{
-
+            this.tableData = res.body.data;
+            this.pageInfo.total = res.body.total;
+            if(this.pageInfo.total >0 ){
+              this.pageFlag = true;
+            }else{
+              this.pageFlag = false;
+            }
           }))
           .catch((err =>{
             this.$message(err.data)
@@ -203,22 +234,38 @@
           this.pageInfo.offset = 0;
           this.pageInfo.total = 0;
         }
-        let url = '/announcement/getAllVersions/?offset='+this.pageInfo.offset + '&limit='+ this.pageInfo.limit;
+        let url = '/announcement/publics/?offset='+this.pageInfo.offset + '&limit='+ this.pageInfo.limit;
         this.$http.get(url)
           .then((res => {
             this.tableData = res.body.data;
             this.pageInfo.total = res.body.total;
+            if(this.pageInfo.total >0 ){
+              this.pageFlag = true;
+            }
           }))
           .catch((err =>{
             this.$message(err.data);
           }))
       },
-      addPublic(){
+      isTimeEvent(){
 
+      },
+
+      timeEvent(){
+        if(this.value6.length ===0 || this.value6.length !== 2){
+          this.$message.error('输入的日期无法做处理!')
+          return
+        }
+        if(this.value6[0] === null|| this.value6[1] === null){
+          this.getAllPublishByPage(0);
+          return
+        }
+        this.getAllPublishByTimePage(0);
       }
     },
     mounted: function () {
       this.loading()
+      this.getAllPublishByPage(0);
     }
   }
 </script>
