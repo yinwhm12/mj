@@ -25,7 +25,7 @@
               <!--<div style="margin: 8px 0;"></div>-->
           <!--</span>-->
 
-        <span v-if="menuIndex ==1">
+        <span v-if="menuIndex ==1  || menuIndex == 2">
           <el-row>
                 <el-col :span="6">
                   <el-input
@@ -42,19 +42,19 @@
         </span>
         <div style="margin: 8px 0;"></div>
 
-        <span v-if="menuIndex == 1">
-          <el-row>
-            <el-col>
-              <div class="grid-content bg-purple-light">
-                <!--<span class="black-head black-font">黑名单</span>-->
-             <!--写入要操作的 玩家 划转金币 钻石-->
-              </div>
-            </el-col>
-          </el-row>
-        </span>
+        <!--<span v-if="menuIndex == 1">-->
+          <!--<el-row>-->
+            <!--<el-col>-->
+              <!--<div class="grid-content bg-purple-light">-->
+                <!--&lt;!&ndash;<span class="black-head black-font">黑名单</span>&ndash;&gt;-->
+             <!--&lt;!&ndash;写入要操作的 玩家 划转金币 钻石&ndash;&gt;-->
+              <!--</div>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+        <!--</span>-->
 
         <!--<div style="margin: 8px 0;"></div>-->
-      <span v-if="menuIndex == 0">
+      <span v-if="menuIndex == 0 || menuIndex == 1">
 
         <el-row>
           <el-col :span="24">
@@ -65,20 +65,32 @@
                 <el-table-column
                   prop="image"
                   label="头像"
-                  width="125">
+                  width="80">
                   <template slot-scope="scope">
-                    <img :src="scope.row.image" style="width: 100px;height: 50px"/>
+                    <span v-if="scope.row.user_data">
+                      <img :src="scope.row.user_data.head_img_url" style="width: 80px;height: 50px"/>
+                    </span>
                   </template>
                 </el-table-column>
               <el-table-column
                 prop="id"
                 label="游戏ID"
-                width="148">
+                width="100">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.achievements">
+                    {{ scope.row.achievements._id}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="nick_name"
                 label="昵称"
                 width="140">
+                  <template slot-scope="scope">
+                  <span v-if="scope.row.user_data">
+                    {{ scope.row.user_data.nick_name}}
+                  </span>
+                </template>
               </el-table-column>
               <!--<el-table-column-->
                 <!--prop="sex"-->
@@ -90,20 +102,41 @@
               <!--</el-table-column>-->
               <el-table-column
                 prop="game_point"
-                label="本周贡献"
-                width="100">
+                label="上周贡献"
+                width="120">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.achievements">
+                      {{ scope.row.achievements.achievements}}
+                    </span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="used_room_cards"
-                label="本周战绩"
-                width="100">
+                label="上周佣金"
+                width="110">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.achievements">
+                      {{ scope.row.achievements.commision}}
+                    </span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="bought_room_cards"
                 label="代理人数"
-                width="120">
+                width="100">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="boughtCardsDialog(scope.row.id)">{{scope.row.bought_room_cards}}</el-button>
+                      {{ scope.row.sons}}
+                </template>
+              </el-table-column>
+
+                <el-table-column
+                  prop="used_room_cards"
+                  label="金币"
+                  width="160">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.user_data">
+                      {{ scope.row.user_data.gold}}
+                    </span>
                 </template>
               </el-table-column>
               <!--<el-table-column-->
@@ -141,15 +174,14 @@
           </el-col>
         </el-row>
       </span>
-        <div style="margin: 8px 0;"></div>
-        <div class="block page-align">
+        <div style="margin: 15px 0;"></div>
+        <div class="block page-align" v-if=" menuIndex == 1">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="pageInfo.currentPage"
-            :page-sizes="[2, 4, 6,8]"
             :page-size="pageInfo.limit"
-            layout="total, sizes, prev, pager, next, jumper"
+            layout="total, prev, pager, next, jumper"
             :total="pageInfo.total">
           </el-pagination>
         </div>
@@ -251,7 +283,7 @@
 //        tableMenus: [],
         pageInfo: {
           currentPage: 1,
-          limit: 2,
+          limit: 8,
           offset: 0,
           total: 0,
         },
@@ -279,24 +311,30 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.pageInfo.limit = val
-        this.getPlayers(0)
+//        this.getPlayers(0)
 //        console.log("page",this.pageInfo)
       },
       handleCurrentChange(currentPage) {
         console.log(`当前页: ${currentPage}`);
         let offset = util.buildOffsetByPage(currentPage,this.pageInfo.limit)
         this.pageInfo.offset = offset
-        this.getPlayers(currentPage)
+//        this.getPlayers(currentPage)
+        this.getPlayerByPage(currentPage);
 
       },
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
         this.menuIndex = key
-        this.pageInfo.total = 0
-        if (this.menuIndex === '1'){
-          this.getBadPlayers(0)
+        this.pageInfo.total = 0;
+        this.player = [];
+        if (this.menuIndex === '0'){
+//          this.getBadPlayers(0)
+            this.getTenTopData(0);
+        }else if(this.menuIndex === '1'){
+//          this.getPlayers(0)
+          this.getPlayerByPage(0);
         }else{
-          this.getPlayers(0)
+          //具体查询某个人
         }
       },
       handleIconClick(ev) {
@@ -304,7 +342,7 @@
       },
       handleIconClickBlack(ev){
 //        console.log(ev);
-        this.getOneBadPlayer();
+//        this.getOneBadPlayer();
       },
       getPlayerCounts(){//总人数
         this.$http.get('/player/playerCount/')
@@ -377,7 +415,7 @@
           }))
       },
       searchBadPlayerEvent(){
-        this.getOneBadPlayer()
+//        this.getOneBadPlayer()
       },
       getOneBadPlayer(){
         if (this.input2 === ''){
@@ -424,12 +462,44 @@
       loading(){
         this.menuIndex = '0'
         this.clickedMenu = this.tableFirstTitle
+      },
+
+      //get ten top
+      getTenTopData(){
+        this.$http.get('/gamers/tenTop/')
+          .then((res =>{
+            this.player = res.data
+          }))
+          .catch((err =>{
+            this.$message({
+              message: '请检查网络!',
+              type: 'warning'
+            })
+          }))
+      },
+
+      //get data by page
+      getPlayerByPage(page = 0){
+        if(page === 0){
+          this.pageInfo.offset = 0;
+          this.pageInfo.total = 0;
+        }
+        let url = '/gamers/gamers/?offset='+this.pageInfo.offset  + '&limit='+ this.pageInfo.limit;
+        this.$http.get(url)
+          .then((res =>{
+            this.player = res.body.data;
+            this.pageInfo.total = res.body.total;
+          }))
+          .catch((err =>{
+            this.$message(err.data);
+          }))
       }
     },
     mounted: function () {
       this.loading()
 //      this.getPlayerCounts()
 //      this.getPlayers(0)
+      this.getTenTopData()
     }
   }
 </script>
