@@ -25,7 +25,7 @@
               <!--<div style="margin: 8px 0;"></div>-->
           <!--</span>-->
 
-        <span v-if="menuIndex ==1  || menuIndex == 2">
+        <span v-if="menuIndex == 2">
           <el-row>
                 <el-col :span="6">
                   <el-input
@@ -185,6 +185,57 @@
             :total="pageInfo.total">
           </el-pagination>
         </div>
+
+        <span v-if="menuIndex == 2">
+          <div style="margin-top: 20px" v-if="playerInfo.user_data !== undefined">
+            <div style="display: flex;flex-direction: column;justify-content: flex-start;">
+              <div style="display: inline-flex;flex-direction: row;align-items: flex-start;">
+                <div style="width: 80px;height: 50px;"><img :src="playerInfo.user_data.head_img_url" style="width: 80px;height: 50px;"/></div>
+                <div style="display: inline;flex-direction: column;align-items: flex-start;margin-left: 10px;">
+                  <div>昵称: {{playerInfo.user_data.nick_name}}</div>
+                  <div style="margin-top: 10px">游戏ID: {{input1}}</div>
+                </div>
+                <!--金币 钻石划转-->
+                <div style="display: inline-flex;flex-direction: column;align-items: flex-start; margin-left: 30px">
+                  <div style="display: inline-flex;flex-direction: row;align-items: flex-start;">
+                    <div>金币划转:</div>
+                    <div style="margin-left: 20px;"> <el-button type="primary" size="mini" round>增加</el-button></div>
+                    <div style="margin-left: 20px;"> <el-button type="warning" size="mini" round>减少</el-button></div>
+                  </div>
+                  <div style="display: inline-flex;flex-direction: row;align-items: flex-start;margin-top: 10px">
+                    <div>钻石划转:</div>
+                    <div style="margin-left: 20px;"> <el-button type="primary" size="mini" round>增加</el-button></div>
+                    <div style="margin-left: 20px"> <el-button type="warning" size="mini" round>减少</el-button></div>
+                  </div>
+                </div>
+              </div>
+
+              <!--金币以及 钻石-->
+              <div style="display: inline-flex;flex-direction: row;align-items: flex-start;margin-top: 10px" v-if="playerInfo.achievement !== undefined">
+                <div>上周总贡献度:{{playerInfo.achievement.achievements}}</div>
+                <div style="margin-left: 10px">上周获得佣金:{{playerInfo.achievement.commision}}</div>
+                <div style="margin-left: 10px">等级:{{playerInfo.achievement.degree}}</div>
+              </div>
+
+              <!--自己的金币-->
+              <div style="display: inline-flex;flex-direction: row;align-items: flex-start;margin-top: 10px">
+                <div>拥有金币:{{playerInfo.user_data.gold}}</div>
+                <div style="margin-left: 10px">拥有钻石:{{playerInfo.user_data.gold}}</div>
+                <div style="margin-left: 10px">直推人数量:{{playerInfo.dears.length}}</div>
+              </div>
+
+              <!--直推人的情况-->
+              <template v-for="item in playerInfo.dears">
+                  <div style="display: inline-flex;flex-direction: column;align-items: flex-start;margin-top: 15px">
+                    <div style="width: 50px;height: 30px"><img :src="item.head_img_url" style="width: 50px;height: 30px"/></div>
+                    <div style="margin-left: 10px">昵称:{{item.nick_name}}</div>
+                    <div style="margin-left: 10px">游戏ID:{{item.game_id}}</div>
+                    <div style="margin-left: 10px">贡献度:{{item.assert}}</div>
+                  </div>
+              </template>
+            </div>
+          </div>
+        </span>
       </el-col>
 
     </el-row>
@@ -287,6 +338,7 @@
           offset: 0,
           total: 0,
         },
+        playerInfo:{},
       };
     },
     computed:{
@@ -329,16 +381,22 @@
         this.player = [];
         if (this.menuIndex === '0'){
 //          this.getBadPlayers(0)
+            this.input1 = '';
+            this.playerInfo = {};
             this.getTenTopData(0);
         }else if(this.menuIndex === '1'){
+          this.input1 = '';
+          this.playerInfo = {};
 //          this.getPlayers(0)
           this.getPlayerByPage(0);
         }else{
           //具体查询某个人
+
         }
       },
       handleIconClick(ev) {
-        this.twoChoosePlayer()
+//        this.twoChoosePlayer()
+        this.getOnePlayer();
       },
       handleIconClickBlack(ev){
 //        console.log(ev);
@@ -369,7 +427,8 @@
           }))
       },
       searchEvent(){
-        this.twoChoosePlayer();
+//        this.twoChoosePlayer();
+        this.getOnePlayer();
       },
       twoChoosePlayer(){//判断是否是黑名单添加搜索 还是 普通搜索
         if(this.menuIndex === '1'){//添加 黑名单 搜索
@@ -379,7 +438,7 @@
           this.getOnePlayer();
         }
       },
-      getOnePlayer(){
+      getOnePlayert(){
         if (this.input1 === ''){
          this.$message({
            message: '请输入有效的玩家ID',
@@ -493,6 +552,28 @@
           .catch((err =>{
             this.$message(err.data);
           }))
+      },
+      getOnePlayer(){
+        if (this.input1 === ''||this.input1.length <= 0){
+          this.$message({
+            message:'输入合理的数据，进行搜索!',
+            type:'warning'
+          })
+          return
+        }
+        let url = '/gamers/getOne/?id='+ this.input1;
+        this.$http.get(url)
+          .then((res =>{
+            this.playerInfo = res.data;
+            console.log('---------------user,',this.playerInfo)
+          }))
+          .catch((err =>{
+            console.log('-------------err:',err.data)
+            this.$message({
+              message:'该玩家不存在',
+              type:'warning'
+            })
+          }))
       }
     },
     mounted: function () {
@@ -500,6 +581,7 @@
 //      this.getPlayerCounts()
 //      this.getPlayers(0)
       this.getTenTopData()
+//      this.getOnePlayer();
     }
   }
 </script>
