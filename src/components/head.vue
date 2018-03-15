@@ -5,7 +5,7 @@
       <div class="grid-content bg-purple-dark">
         <!--<img src="../assets/daozhou_logo.png" style="height: 55px;position: absolute;left: 22%"/><span style="font-family: 'Hiragino Sans GB'; font-size: 28px;position:absolute;left: 25.5%;top: 14px;">银滩道州麻将</span>-->
         <div class="head-middle">
-         <div class="logo"><img src="../assets/dfeng.png"/>
+         <div class="logo"><img src="../../static/img/dfeng.png"/>
            <span class="logo-font" >东风棋牌后台管理系统</span>
            <div class="logo-user"><el-button :plain="true" type="warning" @click="loginOut"><i class="el-icon-information">{{name}}</i></el-button></div>
          </div>
