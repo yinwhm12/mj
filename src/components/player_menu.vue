@@ -199,13 +199,13 @@
                 <div style="display: inline-flex;flex-direction: column;align-items: flex-start; margin-left: 30px">
                   <div style="display: inline-flex;flex-direction: row;align-items: flex-start;">
                     <div>金币划转:</div>
-                    <div style="margin-left: 20px;"> <el-button type="primary" size="mini" round>增加</el-button></div>
-                    <div style="margin-left: 20px;"> <el-button type="warning" size="mini" round>减少</el-button></div>
+                    <div style="margin-left: 20px;"> <el-button type="primary" size="mini" round @click="assertAdd(1)">增加</el-button></div>
+                    <div style="margin-left: 20px;"> <el-button type="warning" size="mini" round @click="assertDown(1)">减少</el-button></div>
                   </div>
                   <div style="display: inline-flex;flex-direction: row;align-items: flex-start;margin-top: 10px">
                     <div>钻石划转:</div>
-                    <div style="margin-left: 20px;"> <el-button type="primary" size="mini" round>增加</el-button></div>
-                    <div style="margin-left: 20px"> <el-button type="warning" size="mini" round>减少</el-button></div>
+                    <div style="margin-left: 20px;"> <el-button type="primary" size="mini" round @click="assertAdd(2)">增加</el-button></div>
+                    <div style="margin-left: 20px"> <el-button type="warning" size="mini" round @click="assertDown(2)">减少</el-button></div>
                   </div>
                 </div>
               </div>
@@ -352,14 +352,6 @@
 
     },
     methods: {
-      gameRecords(id){//游戏的 记录
-        this.gameRecordDialogVisible = true
-      },
-      boughtCardsDialog(id){
-        this.buyer_id = id
-        this.boughtDialogVisible = true
-
-      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.pageInfo.limit = val
@@ -402,18 +394,6 @@
 //        console.log(ev);
 //        this.getOneBadPlayer();
       },
-      getPlayerCounts(){//总人数
-        this.$http.get('/player/playerCount/')
-          .then((res =>{
-            this.playerCounts = res.data
-          }))
-      },
-      getYesterdayCounts(){//昨天 增加的人数
-        this.$http.get('/player/increaseCount/')
-          .then((res =>{
-            this.creaseCounts = res.data
-          }))
-      },
       getPlayers(page = 0){
         if (page === 0){
           this.pageInfo.offset = 0
@@ -438,89 +418,159 @@
           this.getOnePlayer();
         }
       },
-      getOnePlayert(){
-        if (this.input1 === ''){
-         this.$message({
-           message: '请输入有效的玩家ID',
-           type: 'warning'
-         })
-          return
-        }
-        let url = '/player/getOne/?id=' + this.input1
-        this.$http.get(url)
-          .then((res =>{
-            this.player = res.body.data
-            this.pageInfo.offset = 0
-            this.pageInfo.total = res.body.total
-          }))
-          .catch((err =>{
-            this.$message({
-              message: '暂无该玩家ID信息',
-              type: 'warning'
-            })
-          }))
-      },
-
-      getBadPlayers(page = 0){
-        if (page === 0){
-          this.pageInfo.offset = 0
-          this.pageInfo.total = 0
-        }
-        let url = '/player/badPlayers/?offset=' + this.pageInfo.offset + '&limit=' + this.pageInfo.limit
-        this.$http.get(url)
-          .then((res =>{
-            this.player = res.body.data
-            this.pageInfo.total = res.body.total
-          }))
-      },
       searchBadPlayerEvent(){
 //        this.getOneBadPlayer()
-      },
-      getOneBadPlayer(){
-        if (this.input2 === ''){
-          this.$message({
-            message: '请输入有效的玩家ID',
-            type: 'warning'
-          })
-          return
-        }
-        let url = '/player/badPlayer/?id=' + this.input2
-        this.$http.get(url)
-          .then((res =>{
-            this.player = res.body.data
-            this.pageInfo.offset = 0
-            this.pageInfo.total = res.body.total
-          }))
-          .catch((err =>{
-            this.$message({
-              message: '暂无该玩家ID信息',
-              type: 'warning'
-            })
-          }))
-      },
-//      拉黑
-      addBadPlayer(){
-          let message = ''
-          this.$http.put('/player/addBadPlayer/?id='+this.player_id)
-            .then((res =>{
-                message = '已成功将ID为'+this.player_id+'拉入黑名单!'
-                this.$message({
-                  message:message,
-                  type:'success'
-                })
-            }))
-            .catch((err =>{
-                message = '操作失败!'
-                this.$message({
-                  message:message,
-                  type:'warning'
-                })
-            }))
-        this.dialogVisible = false
       },
       loading(){
         this.menuIndex = '0'
         this.clickedMenu = this.tableFirstTitle
+      },
+
+      assertAdd(typeValue){
+        if(typeValue === 1) {
+          //增加金币
+          this.$prompt('请输入要增加金币的数量', '提示金币增加', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /^[0-9]*$/,
+            inputErrorMessage: '数量格式不正确!'
+          }).then(({value}) => {
+            let editData = {
+              id:this.input1,
+              value:value,
+              type:1
+            };
+            this.$http.put('/gamers/editGold/',JSON.stringify(editData))
+              .then((res =>{
+                this.$message({
+                  type: 'success',
+                  message: '成功增加的金额为: ' + value
+                });
+              }))
+              .catch((err =>{
+                this.$message({
+                  type: 'error',
+                  message: '操作失败 '
+                });
+              }))
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消操作'
+            });
+          });
+        }else if(typeValue === 2){
+          //增加钻石
+          this.$prompt('请输入要增加钻石的数量', '提示钻石增加', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /^[0-9]*$/,
+            inputErrorMessage: '数量格式不正确!'
+          }).then(({value}) => {
+            let editData = {
+              id:this.input1,
+              value:value,
+              type:1
+            };
+            this.$http.put('/gamers/editDiamond/',JSON.stringify(editData))
+              .then((res =>{
+                this.$message({
+                  type: 'success',
+                  message: '成功增加的钻石为: ' + value
+                });
+              }))
+              .catch((err =>{
+                this.$message({
+                  type: 'error',
+                  message: '操作失败 '
+                });
+              }))
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消操作'
+            });
+          });
+        }else{
+          this.$message({
+            message:'请检查网络...',
+            type:'warning'
+          })
+        }
+
+      },
+      assertDown(typeValue){
+        if(typeValue === 1){
+          //减少金币
+          this.$prompt('请输入要减少金币的数量', '提示金币减少', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /^[0-9]*$/,
+            inputErrorMessage: '数量格式不正确!'
+          }).then(({value}) => {
+            let editData = {
+              id:this.input1,
+              value:value,
+              type:2
+            };
+            this.$http.put('/gamers/editGold/',JSON.stringify(editData))
+              .then((res =>{
+                this.$message({
+                  type: 'success',
+                  message: '成功减少的金额为: ' + value
+                });
+              }))
+              .catch((err =>{
+                this.$message({
+                  type: 'error',
+                  message: '操作失败 '
+                });
+              }))
+
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消操作'
+            });
+          });
+        }else if(typeValue === 2){
+          //减少钻石
+          this.$prompt('请输入要减少钻石的数量', '提示钻石减少', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /^[0-9]*$/,
+            inputErrorMessage: '数量格式不正确!'
+          }).then(({value}) => {
+            let editData = {
+              id:this.input1,
+              value:value,
+              type:2
+            };
+            this.$http.put('/gamers/editDiamond/',JSON.stringify(editData))
+              .then((res =>{
+                this.$message({
+                  type: 'success',
+                  message: '成功减少的钻石为: ' + value
+                });
+              }))
+              .catch((err =>{
+                this.$message({
+                  type: 'error',
+                  message: '操作失败 '
+                });
+              }))
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消操作'
+            });
+          });
+        }else{
+          this.$message({
+            message:'请检查网络...',
+            type:'warning'
+          })
+        }
       },
 
       //get ten top
