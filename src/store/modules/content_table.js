@@ -16,10 +16,10 @@ const state ={
   ],
   player_menu:[//玩家
     // '所有玩家','黑名单'
-    '上周前10','玩家信息','划转'
+    '上周前10','玩家信息','玩家划转'
   ],
   system_information_menu:[
-    '游戏公告','游戏广播'
+    '游戏公告'
   ],
   version_information_menu:[
     '历史版本','更新版本'

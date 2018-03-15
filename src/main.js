@@ -138,11 +138,15 @@ Vue.http.interceptors.push((request, next) => {
   }
   var host = ENV.HOST_URL
   if (request.url.indexOf(host) !== 0 ){
-    console.log("request.url:",request.url)
+    // console.log("request.url:",request.url)
     request.url = host + request.url
   }
   next((response) => {
     if (response.status === 401){
+      Vue.prototype.$message({
+        message: '请登陆',
+        type: 'warning'
+      });
       router.push({path: '/login'})
     }else if(response.status !==200 ){
       let message = response.status != 0 ? response.body : "请检查网络"
@@ -163,6 +167,6 @@ new Vue({
   render: h => h(App)
 })
 
-console.log("2017-07-04 17:02")
+console.log("2017-12-01 17:02")
 /******/
 

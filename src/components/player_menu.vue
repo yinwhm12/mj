@@ -75,7 +75,7 @@
               <el-table-column
                 prop="id"
                 label="游戏ID"
-                width="100">
+                width="120">
                 <template slot-scope="scope">
                   <span v-if="scope.row.achievements">
                     {{ scope.row.achievements._id}}
@@ -85,7 +85,7 @@
               <el-table-column
                 prop="nick_name"
                 label="昵称"
-                width="140">
+                width="200">
                   <template slot-scope="scope">
                   <span v-if="scope.row.user_data">
                     {{ scope.row.user_data.nick_name}}
@@ -103,7 +103,7 @@
               <el-table-column
                 prop="game_point"
                 label="上周贡献"
-                width="120">
+                width="190">
                 <template slot-scope="scope">
                     <span v-if="scope.row.achievements">
                       {{ scope.row.achievements.achievements}}
@@ -113,7 +113,7 @@
               <el-table-column
                 prop="used_room_cards"
                 label="上周佣金"
-                width="110">
+                width="180">
                 <template slot-scope="scope">
                     <span v-if="scope.row.achievements">
                       {{ scope.row.achievements.commision}}
@@ -132,7 +132,7 @@
                 <el-table-column
                   prop="used_room_cards"
                   label="金币"
-                  width="160">
+                  width="190">
                   <template slot-scope="scope">
                     <span v-if="scope.row.user_data">
                       {{ scope.row.user_data.gold}}
@@ -187,7 +187,7 @@
         </div>
 
         <span v-if="menuIndex == 2">
-          <div style="margin-top: 20px" v-if="playerInfo.user_data !== undefined">
+          <div style="margin-top: 50px;margin-left: 50px" v-if="playerInfo.user_data !== undefined">
             <div style="display: flex;flex-direction: column;justify-content: flex-start;">
               <div style="display: inline-flex;flex-direction: row;align-items: flex-start;">
                 <div style="width: 80px;height: 50px;"><img :src="playerInfo.user_data.head_img_url" style="width: 80px;height: 50px;"/></div>
@@ -212,25 +212,25 @@
 
               <!--金币以及 钻石-->
               <div style="display: inline-flex;flex-direction: row;align-items: flex-start;margin-top: 10px" v-if="playerInfo.achievement !== undefined">
-                <div>上周总贡献度:{{playerInfo.achievement.achievements}}</div>
-                <div style="margin-left: 10px">上周获得佣金:{{playerInfo.achievement.commision}}</div>
-                <div style="margin-left: 10px">等级:{{playerInfo.achievement.degree}}</div>
+                <div>上周总贡献度: {{playerInfo.achievement.achievements}}</div>
+                <div style="margin-left: 30px">上周获得佣金: {{playerInfo.achievement.commision}}</div>
+                <div style="margin-left: 30px">等级: {{playerInfo.achievement.degree}}</div>
               </div>
 
               <!--自己的金币-->
               <div style="display: inline-flex;flex-direction: row;align-items: flex-start;margin-top: 10px">
-                <div>拥有金币:{{playerInfo.user_data.gold}}</div>
-                <div style="margin-left: 10px">拥有钻石:{{playerInfo.user_data.gold}}</div>
-                <div style="margin-left: 10px">直推人数量:{{playerInfo.dears.length}}</div>
+                <div>拥有金币: {{playerInfo.user_data.gold}}</div>
+                <div style="margin-left: 30px">拥有钻石: {{playerInfo.user_data.diamond}}</div>
+                <div style="margin-left: 30px">直推人数量: {{playerInfo.dears.length}}</div>
               </div>
 
               <!--直推人的情况-->
               <template v-for="item in playerInfo.dears">
                   <div style="display: inline-flex;flex-direction: column;align-items: flex-start;margin-top: 15px">
                     <div style="width: 50px;height: 30px"><img :src="item.head_img_url" style="width: 50px;height: 30px"/></div>
-                    <div style="margin-left: 10px">昵称:{{item.nick_name}}</div>
-                    <div style="margin-left: 10px">游戏ID:{{item.game_id}}</div>
-                    <div style="margin-left: 10px">贡献度:{{item.assert}}</div>
+                    <div style="margin-left: 30px">昵称:{{item.nick_name}}</div>
+                    <div style="margin-left: 30px">游戏ID:{{item.game_id}}</div>
+                    <div style="margin-left: 30px">贡献度:{{item.assert}}</div>
                   </div>
               </template>
             </div>
@@ -437,7 +437,7 @@
           }).then(({value}) => {
             let editData = {
               id:this.input1,
-              value:value,
+              value:parseInt(value),
               type:1
             };
             this.$http.put('/gamers/editGold/',JSON.stringify(editData))
@@ -446,11 +446,12 @@
                   type: 'success',
                   message: '成功增加的金额为: ' + value
                 });
+                this.getOnePlayer();
               }))
               .catch((err =>{
                 this.$message({
                   type: 'error',
-                  message: '操作失败 '
+                  message: err.data
                 });
               }))
           }).catch(() => {
@@ -469,7 +470,7 @@
           }).then(({value}) => {
             let editData = {
               id:this.input1,
-              value:value,
+              value:parseInt(value),
               type:1
             };
             this.$http.put('/gamers/editDiamond/',JSON.stringify(editData))
@@ -478,11 +479,12 @@
                   type: 'success',
                   message: '成功增加的钻石为: ' + value
                 });
+                this.getOnePlayer();
               }))
               .catch((err =>{
                 this.$message({
                   type: 'error',
-                  message: '操作失败 '
+                  message: err.data
                 });
               }))
           }).catch(() => {
@@ -510,7 +512,7 @@
           }).then(({value}) => {
             let editData = {
               id:this.input1,
-              value:value,
+              value:parseInt(value),
               type:2
             };
             this.$http.put('/gamers/editGold/',JSON.stringify(editData))
@@ -519,11 +521,12 @@
                   type: 'success',
                   message: '成功减少的金额为: ' + value
                 });
+                this.getOnePlayer();
               }))
               .catch((err =>{
                 this.$message({
                   type: 'error',
-                  message: '操作失败 '
+                  message: err.data
                 });
               }))
 
@@ -543,7 +546,7 @@
           }).then(({value}) => {
             let editData = {
               id:this.input1,
-              value:value,
+              value:parseInt(value),
               type:2
             };
             this.$http.put('/gamers/editDiamond/',JSON.stringify(editData))
@@ -552,11 +555,12 @@
                   type: 'success',
                   message: '成功减少的钻石为: ' + value
                 });
+                this.getOnePlayer();
               }))
               .catch((err =>{
                 this.$message({
                   type: 'error',
-                  message: '操作失败 '
+                  message: err.data
                 });
               }))
           }).catch(() => {

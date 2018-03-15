@@ -11,20 +11,25 @@
             <!--</el-row>-->
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 20px"><span class="font-content">昵称:</span> {{user.id}}</div>
+                <div style="margin-top: 30px"><span class="font-content">名称:</span> {{name}}</div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 20px">
+                <div style="margin-top: 30px">
                   <!--<span class="font-content">代理级别:</span> {{user.proxy_class == 1 ? "超级总代理":"普通总代理"}}-->
-                  <span class="font-content">管理员</span>
+                  <span class="font-content">超级管理员</span>
                 </div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :offset="2">
-                <div style="margin-top: 20px"><span class="font-content">加入代理时间:</span> {{user.created_time | stampToTimeFull}}</div>
+                <div style="margin-top: 50px;display: inline-flex;flex-direction: row;">
+                  <div>
+                    <span class="font-content">版权说明:</span>@东风棋牌团队开发组
+                  </div>
+                  <div style="margin-left: 70px">联系方式:xxxxx</div>
+                </div>
               </el-col>
             </el-row>
           </div>
@@ -97,6 +102,7 @@
 
 <script>
 import HisMoney from './hisMoneyDialog.vue'
+import cook from '../auth/cookie'
   export default {
   components:{
     HisMoney,
@@ -106,10 +112,12 @@ import HisMoney from './hisMoneyDialog.vue'
         user: {},
         dialogVisible: false,
         confirmDialog: false,
+        name:'',
       }
     },
     mounted: function () {
 //      this.getUserInfo()
+      this.getloaclName();
     },
     methods: {
       getUserInfo(){
@@ -130,6 +138,15 @@ import HisMoney from './hisMoneyDialog.vue'
 //        {alert('确定');}
 //        else
 //        {alert('删除');}
+      },
+      getloaclName(){
+        let userInfo = cook.getCookie('daozhouUser');
+        if(Boolean(userInfo) === false){
+          this.name = '没登陆?';
+        }else{
+          let index = userInfo.indexOf('&');
+          this.name = userInfo.substring(0,index) ;
+        }
       }
     }
   }

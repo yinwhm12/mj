@@ -5,9 +5,9 @@
       <div class="grid-content bg-purple-dark">
         <!--<img src="../assets/daozhou_logo.png" style="height: 55px;position: absolute;left: 22%"/><span style="font-family: 'Hiragino Sans GB'; font-size: 28px;position:absolute;left: 25.5%;top: 14px;">银滩道州麻将</span>-->
         <div class="head-middle">
-         <div class="logo"><img src="../assets/daozhou_logo.png"/>
-           <span class="logo-font" >银滩道州麻将</span>
-           <div class="logo-user"><el-button :plain="true" type="warning" @click="loginOut"><i class="el-icon-information">lucky 退出</i></el-button></div>
+         <div class="logo"><img src="../assets/dfeng.png"/>
+           <span class="logo-font" >东风棋牌后台管理系统</span>
+           <div class="logo-user"><el-button :plain="true" type="warning" @click="loginOut"><i class="el-icon-information">{{name}}</i></el-button></div>
          </div>
         </div>
         <!--<div><span>银滩道州麻将</span></div>-->
@@ -33,7 +33,7 @@
     display: inline-block;
     line-height: 50px;
     vertical-align:middle;
-    width: 100px;
+    width: 120px;
   }
   .logo{
     width: 50px;
@@ -90,17 +90,38 @@
 </style>
 
 <script>
+  import cook from '../auth/cookie'
   export default{
     data(){
       return{
-
+        name:'',
       }
     },
     methods:{
       loginOut(){
-        sessionStorage.removeItem('token')
+        if(this.name === ''|| this.name === '没登陆?'){
+
+        }else{
+          sessionStorage.removeItem('token')
+          this.$message({
+            type:'success',
+            message:'退出成功'
+          })
+        }
         this.$router.push({path: '/login'})
+      },
+      getlocalName(){
+        let userInfo = cook.getCookie('daozhouUser');
+        if(Boolean(userInfo) === false){
+          this.name = '没登陆?';
+        }else{
+          let index = userInfo.indexOf('&');
+          this.name = userInfo.substring(0,index) + ' 退出';
+        }
       }
+    },
+    mounted:function () {
+      this.getlocalName();
     }
   }
 </script>

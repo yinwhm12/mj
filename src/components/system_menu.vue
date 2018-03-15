@@ -69,7 +69,7 @@
                     label="操作"
                     width="180">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="small">已发布</el-button>
+                    <span type="text" >已发布</span>
                     <!--<el-button type="primary" size="small">修改</el-button>-->
                     <el-button type="primary" size="small" @click="deleteEvent(scope.row._id)">删除</el-button>
                   </template>
@@ -133,7 +133,7 @@
         tableData: [],
         pageInfo: {
           currentPage: 1,
-          limit: 2,
+          limit: 8,
           offset: 0,
           total: 0,
         },
